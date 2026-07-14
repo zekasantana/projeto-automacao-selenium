@@ -1,0 +1,40 @@
+package br.com.ezequias.automacao.stepdefinitions;
+
+import br.com.ezequias.automacao.pages.HomePage;
+import br.com.ezequias.automacao.pages.LoginPage;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
+
+public class LoginSteps {
+
+    private final HomePage homePage = new HomePage();
+    private final LoginPage loginPage = new LoginPage();
+
+    @Given("que o usuário está na página inicial")
+    public void queOUsuarioEstaNaPaginaInicial() {
+        homePage.acessarHome();
+    }
+
+    @When("acessa a tela de login")
+    public void acessaATelaDeLogin() {
+        loginPage.acessarLogin();
+    }
+
+    @When("informa um usuário e senha válidos")
+    public void informaUmUsuarioESenhaValidos() {
+        loginPage.realizarLogin(
+                "teste2022@teste.com.br",
+                "teste@"
+        );
+    }
+
+    @Then("deve visualizar a página inicial autenticada")
+    public void deveVisualizarPaginaInicialAutenticada() {
+        Assertions.assertTrue(
+                loginPage.loginRealizadoComSucesso(),
+                "O link de logout não foi exibido após o login."
+        );
+    }
+}
