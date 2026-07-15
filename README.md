@@ -51,6 +51,23 @@ A captura é executada automaticamente através de Hooks do Cucumber utilizando:
 - Gera evidências para relatórios
 - Prática utilizada em projetos corporativos
 
+## Changelog
+
+### v1.0.0 - Fundação do Framework
+- Estrutura inicial do framework
+- DriverFactory
+- BasePage
+- Hooks
+- Login com sucesso
+- Login inválido
+
+### Sprint 1.1
+- Captura automática de screenshots em falhas
+
+### Sprint 1.2
+- Logout com sucesso
+
+
 ## Arquitetura do projeto
 
 ```text
