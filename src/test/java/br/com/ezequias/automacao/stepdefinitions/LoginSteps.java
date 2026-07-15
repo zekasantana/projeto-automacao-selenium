@@ -2,6 +2,7 @@ package br.com.ezequias.automacao.stepdefinitions;
 
 import br.com.ezequias.automacao.pages.HomePage;
 import br.com.ezequias.automacao.pages.LoginPage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -55,6 +56,16 @@ public class LoginSteps {
                 mensagemErro.contains("Login was unsuccessful"),
                 "A mensagem de erro de login não foi exibida."
         );
+    }
+
+    @And("realizar logout")
+    public void realizarLogout() {
+        loginPage.realizarLogout();
+    }
+
+    @Then("deve visualizar a pagina de login")
+    public void deveVisualizarAPaginaDeLogin() {
+        Assertions.assertTrue(loginPage.estaNaPaginaLogin());
     }
 
 

@@ -8,6 +8,7 @@ public class LoginPage extends BasePage {
     private final By senha = By.id("Password");
     private final By btnLogin = By.cssSelector("input.login-button");
     private final By linkLogout = By.className("ico-logout");
+    private final By linkLogin = By.className("ico-login");
 
     private final By mensagemErro =
             By.cssSelector(".validation-summary-errors");
@@ -42,4 +43,15 @@ public class LoginPage extends BasePage {
     public String obterMensagemErro() {
         return driver.findElement(mensagemErro).getText();
     }
+
+    public void realizarLogout() {
+        driver.findElement(linkLogout).click();
+
+    }
+
+    public boolean estaNaPaginaLogin() {
+        return driver.findElement(linkLogin).isDisplayed();
+
+    }
+
 }
