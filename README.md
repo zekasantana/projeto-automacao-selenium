@@ -24,7 +24,32 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 
 - Login com sucesso
 - Login com credenciais inválidas
-- 
+
+
+## Captura de Evidências
+
+O framework possui captura automática de screenshots quando um cenário falha.
+
+### Localização
+
+As evidências são armazenadas na pasta:
+
+evidencias/
+
+### Funcionamento
+
+A captura é executada automaticamente através de Hooks do Cucumber utilizando:
+
+- Selenium TakesScreenshot
+- Apache Commons IO
+- Hook @After
+
+### Benefícios
+
+- Facilita análise de falhas
+- Auxilia depuração
+- Gera evidências para relatórios
+- Prática utilizada em projetos corporativos
 
 ## Arquitetura do projeto
 
