@@ -9,6 +9,10 @@ public class LoginPage extends BasePage {
     private final By btnLogin = By.cssSelector("input.login-button");
     private final By linkLogout = By.className("ico-logout");
 
+    private final By mensagemErro =
+            By.cssSelector(".validation-summary-errors");
+
+
     public void acessarLogin() {
         driver.get("https://demowebshop.tricentis.com/login");
     }
@@ -33,5 +37,9 @@ public class LoginPage extends BasePage {
 
     public boolean loginRealizadoComSucesso() {
         return elementoEstaVisivel(linkLogout);
+    }
+
+    public String obterMensagemErro() {
+        return driver.findElement(mensagemErro).getText();
     }
 }

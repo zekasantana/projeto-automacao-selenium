@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginSteps {
 
@@ -37,4 +38,24 @@ public class LoginSteps {
                 "O link de logout não foi exibido após o login."
         );
     }
+
+    @When("informa um usuário e senha inválidos")
+    public void informoUmEmailESenhaInvalidos() {
+        loginPage.realizarLogin(
+                "usuario.inexistente@teste.com",
+                "senhaIncorreta123"
+        );
+    }
+
+    @Then("devo visualizar uma mensagem de erro")
+    public void devoVisualizarUmaMensagemDeErro() {
+        String mensagemErro = loginPage.obterMensagemErro();
+
+        assertTrue(
+                mensagemErro.contains("Login was unsuccessful"),
+                "A mensagem de erro de login não foi exibida."
+        );
+    }
+
+
 }
