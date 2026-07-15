@@ -18,12 +18,12 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - GitHub
 
 
-## Cenários Automatizados
-
-### Login
+### Cenários Automatizados
 
 - Login com sucesso
-- Login com credenciais inválidas
+- Login inválido
+- Logout com sucesso
+- Captura automática de evidências em falhas
 
 
 ## Captura de Evidências
