@@ -17,6 +17,15 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Git
 - GitHub
 
+
+## Cenários Automatizados
+
+### Login
+
+- Login com sucesso
+- Login com credenciais inválidas
+- 
+
 ## Arquitetura do projeto
 
 ```text
@@ -37,3 +46,6 @@ src
     │
     └── resources
         └── features
+
+
+
