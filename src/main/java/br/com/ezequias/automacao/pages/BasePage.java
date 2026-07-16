@@ -8,6 +8,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import br.com.ezequias.automacao.factory.DriverFactory;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class BasePage {
 
@@ -18,9 +20,12 @@ public class BasePage {
     }
 
     protected void clicar(By elemento) {
-        driver.findElement(elemento).click();
-    }
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
+        wait.ignoring(StaleElementReferenceException.class)
+                .until(ExpectedConditions.elementToBeClickable(elemento))
+                .click();
+    }
     protected void escrever(By elemento, String texto) {
         driver.findElement(elemento).clear();
         driver.findElement(elemento).sendKeys(texto);
