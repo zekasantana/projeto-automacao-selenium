@@ -36,6 +36,10 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 ✔ Adição ao carrinho
 ✔ Validação do carrinho
 
+### Checkout
+- Aceitar termos de serviço
+- Avançar para a página de checkou
+
 ## Captura de Evidências
 
 O framework possui captura automática de screenshots quando um cenário falha.
@@ -77,6 +81,26 @@ A captura é executada automaticamente através de Hooks do Cucumber utilizando:
 ### Sprint 1.2
 - Logout com sucesso
 
+
+## Melhorias Técnicas
+
+- Framework estruturado com Page Object Model (POM)
+- DriverFactory para gerenciamento do WebDriver
+- Hooks de inicialização e encerramento dos testes
+- Captura automática de screenshots em falhas
+- Tratamento de StaleElementReferenceException no BasePage
+- Esperas explícitas com WebDriverWait
+- Cucumber BDD integrado ao JUnit 5
+
+
+## Status dos Testes
+
+Tests run: 6
+Failures: 0
+Errors: 0
+Skipped: 0
+
+BUILD SUCCESS
 
 ## Arquitetura do projeto
 
