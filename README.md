@@ -29,6 +29,12 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Cadastro de usuário com dados válidos
 - Geração dinâmica de e-mail para evitar duplicidade
 
+### Fluxo E2E de Compra
+
+✔ Login
+✔ Busca de produto
+✔ Adição ao carrinho
+✔ Validação do carrinho
 
 ## Captura de Evidências
 
