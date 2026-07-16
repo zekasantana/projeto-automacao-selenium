@@ -25,6 +25,10 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Logout com sucesso
 - Captura automática de evidências em falhas
 
+### Cadastro
+- Cadastro de usuário com dados válidos
+- Geração dinâmica de e-mail para evitar duplicidade
+
 
 ## Captura de Evidências
 
