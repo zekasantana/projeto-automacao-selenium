@@ -22,7 +22,7 @@ public class CheckoutPage extends BasePage {
     }
 
     public boolean estaNaPaginaCheckout() {
-        return elementoEstaVisivel(tituloCheckout);
-
+        return elementoEstaVisivel(tituloCheckout)
+                && obterTexto(tituloCheckout).contains("Checkout");
     }
 }
