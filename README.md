@@ -26,8 +26,11 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Captura automática de evidências em falhas
 
 ### Cadastro
+
 - Cadastro de usuário com dados válidos
 - Geração dinâmica de e-mail para evitar duplicidade
+- Cadastro com e-mail já existente (cenário negativo)
+
 
 ### Fluxo E2E de Compra
 
@@ -111,8 +114,20 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
 ### Resultado da suíte
 
-```text
-Tests run: 7
+
+## Status Atual
+
+- 8 cenários automatizados
+- Selenium WebDriver
+- Cucumber BDD
+- JUnit 5
+- Page Object Model (POM)
+- Captura automática de evidências em falhas
+- Fluxo E2E completo de compra validado
+- Cenários positivos e negativos implementados
+
+
+Tests run: 8
 Failures: 0
 Errors: 0
 Skipped: 0
