@@ -35,6 +35,7 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 ✔ Busca de produto
 ✔ Adição ao carrinho
 ✔ Validação do carrinho
+✔Checkout completo com confirmação do pedido
 
 ### Checkout
 - Aceitar termos de serviço
@@ -82,24 +83,39 @@ A captura é executada automaticamente através de Hooks do Cucumber utilizando:
 - Logout com sucesso
 
 
-## Melhorias Técnicas
+## Sprint 1.6 - Checkout Completo
 
-- Framework estruturado com Page Object Model (POM)
-- DriverFactory para gerenciamento do WebDriver
-- Hooks de inicialização e encerramento dos testes
-- Captura automática de screenshots em falhas
-- Tratamento de StaleElementReferenceException no BasePage
-- Esperas explícitas com WebDriverWait
-- Cucumber BDD integrado ao JUnit 5
+Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
+- Login
+- Busca de produto
+- Adição ao carrinho
+- Aceite dos termos de serviço
+- Checkout
+- Billing Address
+- Shipping Address
+- Shipping Method
+- Payment Method
+- Confirmação do pedido
 
-## Status dos Testes
+### Novas classes
 
-Tests run: 6
+- CompleteCheckoutPage.java
+- CompleteCheckoutSteps.java
+
+### Melhorias
+
+- Método reutilizável `selecionarPorTexto()` na BasePage
+- Esperas explícitas em métodos reutilizáveis
+- Validação da mensagem de pedido concluído
+
+### Resultado da suíte
+
+```text
+Tests run: 7
 Failures: 0
 Errors: 0
 Skipped: 0
-
 BUILD SUCCESS
 
 ## Arquitetura do projeto
