@@ -70,4 +70,19 @@ public class CadastroSteps {
                         + "Mensagem exibida: " + mensagemErro
         );
     }
+
+    @When("não preencho os campos obrigatórios")
+    public void naoPreenchoOsCamposObrigatorios() {
+        // Não preenche nada propositalmente
+    }
+
+    @Then("devo visualizar mensagens de campos obrigatórios")
+    public void devoVisualizarMensagensDeCamposObrigatorios() {
+
+        assertTrue(
+                registerPage.mensagemCampoObrigatorioVisivel(),
+                "As mensagens de validação não foram exibidas."
+        );
+    }
+
 }

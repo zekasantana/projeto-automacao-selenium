@@ -4,21 +4,35 @@ import org.openqa.selenium.By;
 
 public class RegisterPage extends BasePage {
 
-    private By linkRegister = By.className("ico-register");
+    private final By linkRegister =
+            By.className("ico-register");
 
-    private By campoNome = By.id("FirstName");
-    private By campoSobrenome = By.id("LastName");
-    private By campoEmail = By.id("Email");
-    private By campoSenha = By.id("Password");
-    private By campoConfirmacaoSenha = By.id("ConfirmPassword");
+    private final By campoNome =
+            By.id("FirstName");
 
-    private By botaoRegistrar = By.id("register-button");
+    private final By campoSobrenome =
+            By.id("LastName");
 
-    private By mensagemSucesso =
-            By.className ("result");
+    private final By campoEmail =
+            By.id("Email");
 
-    private By mensagemEmailExistente =
+    private final By campoSenha =
+            By.id("Password");
+
+    private final By campoConfirmacaoSenha =
+            By.id("ConfirmPassword");
+
+    private final By botaoRegistrar =
+            By.id("register-button");
+
+    private final By mensagemSucesso =
+            By.className("result");
+
+    private final By mensagemEmailExistente =
             By.cssSelector(".message-error");
+
+    private final By mensagemErroCampoObrigatorio =
+            By.cssSelector(".field-validation-error");
 
     public void acessarTelaCadastro() {
         driver.get("https://demowebshop.tricentis.com");
@@ -44,12 +58,13 @@ public class RegisterPage extends BasePage {
 
     public boolean cadastroRealizadoComSucesso() {
         return elementoEstaVisivel(mensagemSucesso);
-
     }
 
     public String obterMensagemEmailExistente() {
         return obterTexto(mensagemEmailExistente);
-
     }
 
+    public boolean mensagemCampoObrigatorioVisivel() {
+        return elementoEstaVisivel(mensagemErroCampoObrigatorio);
+    }
 }
