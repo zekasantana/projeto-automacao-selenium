@@ -1,56 +1,73 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
 import br.com.ezequias.automacao.pages.RegisterPage;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
 public class CadastroSteps {
 
     private final RegisterPage registerPage = new RegisterPage();
 
-        RegisterPage register = new RegisterPage();
+    private String emailGerado;
 
-        String emailGerado;
+    @Given("que o usuário acessa a tela de cadastro")
+    @Given("que estou na página de cadastro")
+    public void acessarTelaCadastro() {
+        registerPage.acessarTelaCadastro();
+    }
 
-        @Given("que o usuário acessa a tela de cadastro")
-        public void acessarTelaCadastro() {
+    @When("preencher os dados válidos")
+    public void preencherDadosValidos() {
 
-            registerPage.acessarTelaCadastro();
+        emailGerado =
+                "teste" + System.currentTimeMillis() + "@email.com";
 
-        }
+        registerPage.preencherCadastro(
+                "Ezequias",
+                "Santana",
+                emailGerado,
+                "123456"
+        );
+    }
 
-        @When("preencher os dados válidos")
-        public void preencherDadosValidos() {
+    @When("clicar em registrar")
+    @When("clico no botão Register")
+    public void clicarEmRegistrar() {
+        registerPage.clicarRegistrar();
+    }
 
-            emailGerado =
-                    "teste" + System.currentTimeMillis() + "@email.com";
+    @Then("o cadastro deve ser realizado com sucesso")
+    public void validarCadastro() {
+        assertTrue(
+                registerPage.cadastroRealizadoComSucesso(),
+                "O cadastro não foi realizado com sucesso."
+        );
+    }
 
-            registerPage.preencherCadastro(
-                    "Ezequias",
-                    "Santana",
-                    emailGerado,
-                    "123456"
-            );
+    @When("informo os dados de um usuário já cadastrado")
+    public void informoOsDadosDeUmUsuarioJaCadastrado() {
 
-        }
+        registerPage.preencherCadastro(
+                "Teste",
+                "Usuario",
+                "teste2022@teste.com.br",
+                "123456"
+        );
+    }
 
-        @When("clicar em registrar")
-        public void clicarEmRegistrar() {
+    @Then("devo visualizar a mensagem de erro de e-mail já existente")
+    public void devoVisualizarAMensagemDeErroDeEmailJaExistente() {
 
-            registerPage.clicarRegistrar();
+        String mensagemErro =
+                registerPage.obterMensagemEmailExistente();
 
-        }
-
-        @Then("o cadastro deve ser realizado com sucesso")
-        public void ValidarCadastro() {
-
-            assertTrue(registerPage.cadastroRealizadoComSucesso());
-
-        }
-
+        assertTrue(
+                mensagemErro.contains("already exists"),
+                "Mensagem de e-mail já existente não encontrada. "
+                        + "Mensagem exibida: " + mensagemErro
+        );
+    }
 }

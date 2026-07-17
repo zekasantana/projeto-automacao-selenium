@@ -22,7 +22,7 @@ public class BasePage {
     protected void clicar(By elemento) {
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(10)
+                Duration.ofSeconds(3)
         );
 
         wait.ignoring(StaleElementReferenceException.class)
@@ -67,6 +67,10 @@ public class BasePage {
         );
 
         select.selectByVisibleText(texto);
+    }
+
+    protected boolean elementoExiste(By elemento) {
+        return !driver.findElements(elemento).isEmpty();
     }
 
     protected boolean elementoEstaVisivel(By elemento) {

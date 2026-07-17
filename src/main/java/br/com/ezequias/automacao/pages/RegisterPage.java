@@ -17,6 +17,9 @@ public class RegisterPage extends BasePage {
     private By mensagemSucesso =
             By.className ("result");
 
+    private By mensagemEmailExistente =
+            By.cssSelector(".message-error");
+
     public void acessarTelaCadastro() {
         driver.get("https://demowebshop.tricentis.com");
         clicar(linkRegister);
@@ -41,8 +44,12 @@ public class RegisterPage extends BasePage {
 
     public boolean cadastroRealizadoComSucesso() {
         return elementoEstaVisivel(mensagemSucesso);
+
     }
 
+    public String obterMensagemEmailExistente() {
+        return obterTexto(mensagemEmailExistente);
 
+    }
 
 }
