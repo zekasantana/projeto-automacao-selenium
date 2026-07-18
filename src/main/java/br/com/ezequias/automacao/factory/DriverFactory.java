@@ -30,9 +30,21 @@ public class DriverFactory {
                 .toLowerCase()
                 .trim();
 
-        boolean headless = Boolean.parseBoolean(
-                System.getProperty("headless", "false")
+        boolean executandoNoCI = Boolean.parseBoolean(
+                System.getenv().getOrDefault("CI", "false")
         );
+
+        boolean headless = Boolean.parseBoolean(
+                System.getProperty(
+                        "headless",
+                        String.valueOf(executandoNoCI)
+                )
+        );
+
+        // LOGS TEMPORÁRIOS
+        System.out.println("Navegador selecionado: " + browser);
+        System.out.println("Execução headless: " + headless);
+        System.out.println("Ambiente CI: " + executandoNoCI);
 
         WebDriver navegador;
 
