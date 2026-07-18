@@ -19,6 +19,7 @@
         <selenium.version>4.34.0</selenium.version>
         <cucumber.version>7.22.2</cucumber.version>
         <junit.platform.version>1.12.2</junit.platform.version>
+        <allure.version>2.34.0</allure.version>
     </properties>
 
     <dependencies>
@@ -62,6 +63,15 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Integração Allure com Cucumber 7 -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber7-jvm</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Manipulação de arquivos para evidências -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -73,6 +83,7 @@
     <build>
         <plugins>
 
+            <!-- Compilação com Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -83,6 +94,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Execução dos testes -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
