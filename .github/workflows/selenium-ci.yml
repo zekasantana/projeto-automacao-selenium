@@ -36,8 +36,8 @@ jobs:
           mvn -version
           google-chrome --version
 
-      - name: Executar testes automatizados
-        run: mvn clean test
+      - name: Executar testes automatizados no Chrome
+        run: mvn clean test -Dbrowser=chrome -Dheadless=true
 
       - name: Publicar resultados do Allure
         if: always()
