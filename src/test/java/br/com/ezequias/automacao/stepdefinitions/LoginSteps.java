@@ -66,6 +66,27 @@ public class LoginSteps {
     @Then("deve visualizar a pagina de login")
     public void deveVisualizarAPaginaDeLogin() {
         Assertions.assertTrue(loginPage.estaNaPaginaLogin());
+
+    }
+
+    @When("não preencho email e senha")
+    public void naoPreenchoEmailESenha() {
+        // Intencionalmente vazio
+    }
+
+    @When("clico no botão de login")
+    public void clicoNoBotaoDeLogin() {
+        loginPage.clicarEntrar();
+    }
+
+    @Then("devo visualizar a mensagem de erro de login")
+    public void devoVisualizarAMensagemDeErroDeLogin() {
+
+        assertTrue(
+                loginPage.obterMensagemErro()
+                        .contains("Login was unsuccessful"),
+                "Mensagem de erro não encontrada."
+        );
     }
 
 
