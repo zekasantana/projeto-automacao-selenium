@@ -17,5 +17,9 @@ public class SearchPage extends BasePage {
         return elementoEstaVisivel(resultadoProduto);
     }
 
+    public void clicarProduto() {
+        clicar(resultadoProduto);
+    }
+
 
 }

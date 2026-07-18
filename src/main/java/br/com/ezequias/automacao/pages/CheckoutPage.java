@@ -13,6 +13,9 @@ public class CheckoutPage extends BasePage {
     private By tituloCheckout =
             By.cssSelector(".page-title");
 
+    private By mensagemTermos =
+            By.id("terms-of-service-warning-box");
+
     public void aceitarTermos() {
         clicar(checkboxTermos);
     }
@@ -25,4 +28,13 @@ public class CheckoutPage extends BasePage {
         return elementoEstaVisivel(tituloCheckout)
                 && obterTexto(tituloCheckout).contains("Checkout");
     }
+
+    public boolean mensagemTermosEstaVisivel() {
+        return elementoEstaVisivel(mensagemTermos);
+    }
+
+    public String obterMensagemTermos() {
+        return obterTexto(mensagemTermos);
+    }
+
 }
