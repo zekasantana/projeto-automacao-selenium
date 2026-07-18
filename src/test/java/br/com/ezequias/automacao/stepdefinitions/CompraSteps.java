@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CompraSteps {
 
@@ -51,6 +52,27 @@ public class CompraSteps {
         assertTrue(
                 cartPage.produtoEstaNoCarrinho(),
                 "O produto não foi encontrado no carrinho."
+        );
+    }
+
+    @When("busca pelo produto inexistente {string}")
+    public void buscaPeloProdutoInexistente(String produto) {
+
+        searchPage.buscarProduto(produto);
+    }
+
+    @Then("deve visualizar a mensagem de produto não encontrado")
+    public void deveVisualizarAMensagemDeProdutoNaoEncontrado() {
+
+        assertTrue(
+                searchPage.mensagemProdutoNaoEncontradoEstaVisivel(),
+                "A mensagem de produto não encontrado não foi exibida."
+        );
+
+        assertEquals(
+                "No products were found that matched your criteria.",
+                searchPage.obterMensagemProdutoNaoEncontrado(),
+                "A mensagem apresenta está diferente da esperada."
         );
     }
 
