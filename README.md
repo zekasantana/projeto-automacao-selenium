@@ -138,7 +138,6 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
 ### Resultado da suíte
 
-
 ## Status Atual
 
 - 13 cenários automatizados
@@ -150,11 +149,30 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 - Fluxo E2E completo de compra validado
 - Cenários positivos e negativos implementados
 
+
+## CI/CD com GitHub Actions
+
+O projeto possui integração contínua utilizando GitHub Actions.
+
+A pipeline executa automaticamente:
+
+- Build Maven
+- Execução dos testes automatizados
+- Geração dos resultados Allure
+- Publicação dos relatórios de execução
+
+A execução ocorre em:
+
+- Push para main
+- Pull Request para main
+- Execução manual pela aba Actions
+
 ## Relatórios Allure
 
 Gerar os resultados:
 
 ```bash
+
 
 mvn clean test
 
@@ -166,24 +184,28 @@ BUILD SUCCESS
 
 ## Arquitetura do projeto
 
-```text
-src
-├── main
-│   └── java
-│       └── br.com.ezequias.automacao
-│           ├── factory
-│           ├── pages
-│           └── utils
-│
-└── test
-    ├── java
-    │   └── br.com.ezequias.automacao
-    │       ├── hooks
-    │       ├── runner
-    │       └── stepdefinitions
-    │
-    └── resources
-        └── features
-
-
-
+projeto-automacao-selenium
+├── .github
+│   └── workflows
+│       └── selenium-ci.yml
+├── evidencias
+├── src
+│   ├── main
+│   │   └── java
+│   │       └── br.com.ezequias.automacao
+│   │           ├── core
+│   │           ├── factory
+│   │           └── pages
+│   └── test
+│       ├── java
+│       │   └── br.com.ezequias.automacao
+│       │       ├── hooks
+│       │       ├── runner
+│       │       └── stepdefinitions
+│       └── resources
+│           ├── config
+│           ├── features
+│           ├── massas
+│           └── allure.properties
+├── pom.xml
+└── README.md
