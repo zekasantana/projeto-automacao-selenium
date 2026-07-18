@@ -13,6 +13,9 @@ public class CartPage extends BasePage {
     private By produtoCarrinho =
             By.linkText("14.1-inch Laptop");
 
+    private By mensagemCarrinhoVazio =
+            By.cssSelector(".order-summary-content");
+
     public void adicionarAoCarrinho() {
         clicar(botaoAdicionarCarrinho);
     }
@@ -23,6 +26,15 @@ public class CartPage extends BasePage {
 
     public boolean produtoEstaNoCarrinho() {
         return elementoEstaVisivel(produtoCarrinho);
+    }
+
+    public String obterMensagemCarrinho() {
+        return obterTexto(mensagemCarrinhoVazio);
+    }
+
+    public boolean carrinhoEstaVazio() {
+        return obterMensagemCarrinho()
+                .contains("Your Shopping Cart is empty!");
     }
 
 }

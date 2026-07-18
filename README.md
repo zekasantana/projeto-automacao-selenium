@@ -21,7 +21,6 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 ### Cenários Automatizados
 
 - Login com sucesso
-- Login com credenciais inválida
 - Logout com sucesso
 - Captura automática de evidências em falhas
 

@@ -55,4 +55,30 @@ public class CheckoutNegativoSteps {
                 "A mensagem exibida está diferente da esperada."
         );
     }
+
+    @Given("que o usuário está logado")
+    public void queOUsuarioEstaLogado() {
+
+        loginPage.acessarLogin();
+
+        loginPage.realizarLogin(
+                "teste2022@teste.com.br",
+                "123456"
+        );
+    }
+
+    @When("acessa o carrinho sem produtos")
+    public void acessaOCarrinhoSemProdutos() {
+
+        cartPage.acessarCarrinho();
+    }
+
+    @Then("o carrinho deve estar vazio")
+    public void oCarrinhoDeveEstarVazio() {
+
+        assertTrue(
+                cartPage.carrinhoEstaVazio(),
+                "O carrinho não está vazio."
+        );
+    }
 }
