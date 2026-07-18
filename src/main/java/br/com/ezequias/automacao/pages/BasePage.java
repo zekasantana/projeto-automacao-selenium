@@ -10,6 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.TimeoutException;
 
 public class BasePage {
 
@@ -87,5 +90,32 @@ public class BasePage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    protected boolean alertaEstaPresente() {
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(3))
+                    .until(ExpectedConditions.alertIsPresent());
+
+            return true;
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
+
+    protected String obterTextoEFecharAlerta() {
+        try {
+            Alert alerta = driver.switchTo().alert();
+            String mensagem = alerta.getText();
+            alerta.accept();
+
+            return mensagem;
+        } catch (NoAlertPresentException e) {
+            return "";
+        }
+    }
+
+    protected void atualizarPagina() {
+        driver.navigate().refresh();
     }
 }
