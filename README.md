@@ -141,7 +141,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
 ## Status Atual
 
-- 12 cenários automatizados
+- 13 cenários automatizados
 - Selenium WebDriver
 - Cucumber BDD
 - JUnit 5
@@ -151,7 +151,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 - Cenários positivos e negativos implementados
 
 
-Tests run: 12
+Tests run: 13
 Failures: 0
 Errors: 0
 Skipped: 0
