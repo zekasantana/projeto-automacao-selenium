@@ -21,9 +21,15 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 ### Cenários Automatizados
 
 - Login com sucesso
-- Login inválido
+- Login com credenciais inválida
 - Logout com sucesso
 - Captura automática de evidências em falhas
+
+### Login negativo
+
+- Login com credenciais inválidas
+- Login com campos de e-mail e senha vazios
+- Validação da mensagem de erro apresentada ao usuário
 
 ### Cadastro
 
@@ -126,7 +132,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
 ## Status Atual
 
-- 10 cenários automatizados
+- 11 cenários automatizados
 - Selenium WebDriver
 - Cucumber BDD
 - JUnit 5
@@ -136,7 +142,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 - Cenários positivos e negativos implementados
 
 
-Tests run: 10
+Tests run: 11
 Failures: 0
 Errors: 0
 Skipped: 0
