@@ -57,6 +57,7 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Adição ao carrinho
 - Tentativa de checkout sem aceitar os termos de serviço
 - Validação da mensagem de bloqueio
+- checkout sem produto no carrinho
 
 ## Captura de Evidências
 
@@ -131,7 +132,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 
 ## Status Atual
 
-- 11 cenários automatizados
+- 12 cenários automatizados
 - Selenium WebDriver
 - Cucumber BDD
 - JUnit 5
@@ -141,7 +142,7 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 - Cenários positivos e negativos implementados
 
 
-Tests run: 11
+Tests run: 12
 Failures: 0
 Errors: 0
 Skipped: 0
