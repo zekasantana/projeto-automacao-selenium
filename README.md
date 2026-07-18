@@ -167,6 +167,19 @@ A execução ocorre em:
 - Pull Request para main
 - Execução manual pela aba Actions
 
+## Cross Browser Testing
+
+O framework suporta execução em múltiplos navegadores através de parâmetros Maven.
+
+## Navegadores suportados:
+
+* Google Chrome
+* Microsoft Edge
+* Mozilla Firefox
+
+```bash
+mvn clean test -Dbrowser=chrome
+
 ## Relatórios Allure
 
 Gerar os resultados:
