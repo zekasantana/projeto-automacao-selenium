@@ -37,6 +37,15 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Cadastro com e-mail já existente (cenário negativo)
 - Cadastro sem preenchimento dos campos obrigatórios
 
+### Busca de Produtos
+
+- Busca de produto existente
+- Adição de produto ao carrinho
+- Validação do carrinho
+- Busca de produto inexistente
+- Validação da mensagem:
+  "No products were found that matched your criteria."
+
 
 ### Fluxo E2E de Compra
 
