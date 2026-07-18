@@ -150,6 +150,13 @@ Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
 - Fluxo E2E completo de compra validado
 - Cenários positivos e negativos implementados
 
+## Relatórios Allure
+
+Gerar os resultados:
+
+```bash
+
+mvn clean test
 
 Tests run: 13
 Failures: 0
