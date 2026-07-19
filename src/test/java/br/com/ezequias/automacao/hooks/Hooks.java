@@ -4,6 +4,7 @@ import br.com.ezequias.automacao.factory.DriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
+import io.qameta.allure.Allure;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -20,28 +21,31 @@ public class Hooks {
 
     @After
     public void after(Scenario scenario) {
-        if (scenario.isFailed()) {
-
-            File screenshot =
-                    ((TakesScreenshot) DriverFactory.getDriver())
-                            .getScreenshotAs(OutputType.FILE);
-            try {
+        try {
+            if (scenario.isFailed()) {
+                File screenshot =
+                        ((TakesScreenshot) DriverFactory.getDriver())
+                                .getScreenshotAs(OutputType.FILE);
 
                 FileUtils.copyFile(
                         screenshot,
                         new File(
                                 "evidencias/"
                                         + scenario.getName()
-                                        .replace(" ", "_")
+                                        .replaceAll("[^a-zA-Z0-9-]", "")
                                         + ".png"
                         )
                 );
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
+        } catch (IOException e) {
+            System.err.println(
+                    "Não foi possível salvar a evidência do cenário: "
+                            + scenario.getName()
+            );
+            e.printStackTrace();
+        } finally {
+            DriverFactory.quitDriver();
 
-        DriverFactory.quitDriver();
+        }
     }
 }
