@@ -12,17 +12,21 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class DriverFactory {
 
-    private static WebDriver driver;
+    /*
+     * Cada thread terá sua própria instância do WebDriver.
+     * Isso evita que cenários paralelos compartilhem o mesmo navegador.
+     */
+    private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
     private DriverFactory() {
     }
 
     public static WebDriver getDriver() {
-        if (driver == null) {
-            driver = criarDriver();
+        if (DRIVER.get() == null) {
+            DRIVER.set(criarDriver());
         }
 
-        return driver;
+        return DRIVER.get();
     }
 
     private static WebDriver criarDriver() {
@@ -41,10 +45,18 @@ public class DriverFactory {
                 )
         );
 
-        // LOGS TEMPORÁRIOS
-        System.out.println("Navegador selecionado: " + browser);
-        System.out.println("Execução headless: " + headless);
-        System.out.println("Ambiente CI: " + executandoNoCI);
+        System.out.println(
+                "Thread: " + Thread.currentThread().getName()
+        );
+        System.out.println(
+                "Navegador selecionado: " + browser
+        );
+        System.out.println(
+                "Execução headless: " + headless
+        );
+        System.out.println(
+                "Ambiente CI: " + executandoNoCI
+        );
 
         WebDriver navegador;
 
@@ -131,9 +143,18 @@ public class DriverFactory {
     }
 
     public static void quitDriver() {
+        WebDriver driver = DRIVER.get();
+
         if (driver != null) {
-            driver.quit();
-            driver = null;
+            try {
+                driver.quit();
+            } finally {
+                /*
+                 * Remove a referência da thread para evitar vazamento
+                 * de memória e reutilização indevida do navegador.
+                 */
+                DRIVER.remove();
+            }
         }
     }
 }
