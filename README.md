@@ -1,222 +1,255 @@
-# Projeto de Automação Selenium
+# 🚀 Projeto de Automação Selenium
 
-Framework de automação de testes Web desenvolvido com Java, Selenium WebDriver, Cucumber BDD, JUnit 5 e Maven.
+![Java](https://img.shields.io/badge/Java-17-orange)
+![Selenium](https://img.shields.io/badge/Selenium-4.x-green)
+![Cucumber](https://img.shields.io/badge/Cucumber-BDD-brightgreen)
+![JUnit5](https://img.shields.io/badge/JUnit-5-blue)
+![Maven](https://img.shields.io/badge/Maven-3.9-red)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-success)
 
-## Objetivo
+Framework de automação de testes Web desenvolvido com **Java 17, Selenium WebDriver, Cucumber BDD, JUnit 5, Maven, Docker e GitHub Actions**, seguindo boas práticas de mercado para construção de soluções escaláveis, reutilizáveis e preparadas para integração contínua.
 
-Este projeto tem como objetivo demonstrar a construção de uma arquitetura profissional de automação de testes, utilizando Page Object Model, separação de responsabilidades e cenários escritos em Gherkin.
+O projeto foi criado com o objetivo de demonstrar a evolução de um framework profissional de automação, cobrindo desde a estrutura inicial até funcionalidades avançadas como execução paralela, Cross Browser Testing, Dockerização e CI/CD.
 
-## Tecnologias utilizadas
+A arquitetura foi construída utilizando o padrão **Page Object Model (POM)**, promovendo separação de responsabilidades, reutilização de código e facilidade de manutenção. O gerenciamento dos navegadores é realizado através da **DriverFactory**, que suporta diferentes browsers e execução em modo headless para ambientes de integração contínua.
 
-- Java 17
-- Selenium WebDriver
-- Cucumber
-- JUnit 5
-- Maven
-- IntelliJ IDEA
-- Git
-- GitHub Actions
+Ao longo das sprints foram implementados cenários funcionais, fluxos End-to-End e cenários negativos, simulando situações reais encontradas em aplicações de e-commerce.
+
+---
+
+# 🎯 Objetivo do Projeto
+
+Demonstrar a construção de um framework de automação moderno capaz de atender às necessidades de equipes ágeis, contemplando:
+
+- Automação Web
+- Testes End-to-End
+- Testes positivos e negativos
+- Cross Browser Testing
+- Execução Paralela
+- Evidências Automáticas
 - Docker
+- Integração Contínua
+- Relatórios de Execução
 
+---
 
-### Cenários Automatizados
+# 🛠 Tecnologias Utilizadas
 
-- Login com sucesso
-- Logout com sucesso
-- Captura automática de evidências em falhas
+| Tecnologia | Versão |
+|------------|---------|
+| Java | 17 |
+| Selenium WebDriver | 4.x |
+| Cucumber | 7.x |
+| JUnit Platform | 1.x |
+| Maven | 3.9+ |
+| Docker | Latest |
+| GitHub Actions | CI/CD |
+| Chrome | Latest |
+| Firefox | Latest |
+| Edge | Latest |
 
-### Login negativo
+---
+
+# 🏗 Arquitetura do Framework
+
+O projeto segue o padrão **Page Object Model (POM)** para garantir organização, reutilização e facilidade de manutenção.
+
+### Factory
+
+Responsável pela criação e gerenciamento dos navegadores.
+
+Classe principal:
+
+- DriverFactory
+
+Funcionalidades:
+
+- Suporte a Chrome
+- Suporte a Firefox
+- Suporte a Edge
+- Execução Headless
+- Compatibilidade com Docker
+- Compatibilidade com GitHub Actions
+
+---
+
+### Pages
+
+Responsáveis por encapsular elementos e ações das páginas da aplicação.
+
+Páginas implementadas:
+
+- LoginPage
+- RegisterPage
+- SearchPage
+- CartPage
+- CheckoutPage
+- CompleteCheckoutPage
+
+---
+
+### Step Definitions
+
+Implementação dos passos BDD escritos em Gherkin.
+
+Classes:
+
+- LoginSteps
+- CadastroSteps
+- CompraSteps
+- CheckoutSteps
+- CompleteCheckoutSteps
+
+---
+
+### Hooks
+
+Responsáveis por:
+
+- Inicialização do navegador
+- Encerramento da execução
+- Captura automática de screenshots
+
+---
+
+### Features
+
+Cenários escritos utilizando Cucumber BDD.
+
+Arquivos:
+
+- login.feature
+- cadastro.feature
+- compra.feature
+- checkout.feature
+- checkout_negativo.feature
+
+---
+
+# 🔄 Funcionalidades Automatizadas
+
+## Login
+
+### Positivo
+
+- Login com credenciais válidas
+
+### Negativo
 
 - Login com credenciais inválidas
-- Login com campos de e-mail e senha vazios
-- Validação da mensagem de erro apresentada ao usuário
 
-### Cadastro
+---
 
-- Cadastro de usuário com dados válidos
-- Geração dinâmica de e-mail para evitar duplicidade
-- Cadastro com e-mail já existente (cenário negativo)
+## Logout
+
+- Logout realizado com sucesso
+
+---
+
+## Cadastro
+
+### Positivo
+
+- Cadastro de novo usuário
+
+### Negativo
+
+- Cadastro com e-mail já existente
 - Cadastro sem preenchimento dos campos obrigatórios
 
-### Busca de Produtos
+---
+
+## Busca de Produtos
+
+### Positivo
 
 - Busca de produto existente
-- Adição de produto ao carrinho
-- Validação do carrinho
+
+### Negativo
+
 - Busca de produto inexistente
-- Validação da mensagem:
-  "No products were found that matched your criteria."
 
+---
 
-### Fluxo E2E de Compra
+## Carrinho
+
+### Positivo
+
+- Adicionar produto ao carrinho
+
+### Negativo
+
+- Carrinho vazio
+
+---
+
+## Checkout
+
+### Positivo
+
+Fluxo completo de compra:
 
 ✔ Login
-✔ Busca de produto
-✔ Adição ao carrinho
-✔ Validação do carrinho
-✔Checkout completo com confirmação do pedido
 
-### Checkout
-- Aceitar termos de serviço
-- Avançar para a página de checkout
+✔ Busca de Produto
 
-### Checkout Negativo
+✔ Adicionar ao Carrinho
 
-- Login do usuário
-- Busca do produto
-- Adição ao carrinho
-- Tentativa de checkout sem aceitar os termos de serviço
-- Validação da mensagem de bloqueio
-- checkout sem produto no carrinho
+✔ Aceitar Termos de Serviço
 
-## Captura de Evidências
+✔ Checkout
 
-O framework possui captura automática de screenshots quando um cenário falha.
+✔ Billing Address
 
-### Localização
+✔ Shipping Address
 
-As evidências são armazenadas na pasta:
+✔ Shipping Method
 
-evidencias/
+✔ Payment Method
 
-### Funcionamento
+✔ Confirm Order
 
-A captura é executada automaticamente através de Hooks do Cucumber utilizando:
+✔ Pedido Concluído
 
-- Selenium TakesScreenshot
-- Apache Commons IO
-- Hook @After
+### Negativo
 
-### Benefícios
+- Checkout sem aceitar os termos de serviço
 
-- Facilita análise de falhas
-- Auxilia depuração
-- Gera evidências para relatórios
-- Prática utilizada em projetos corporativos
+---
 
-## Changelog
+# ⚡ Execução Paralela
 
-### v1.0.0 - Fundação do Framework
-- Estrutura inicial do framework
-- DriverFactory
-- BasePage
-- Hooks
-- Login com sucesso
-- Login inválido
+O framework foi preparado para execução paralela utilizando:
 
-### Sprint 1.1
-- Captura automática de screenshots em falhas
+- JUnit Platform
+- Cucumber
+- ThreadLocal WebDriver
 
-### Sprint 1.2
-- Logout com sucesso
-
-
-## Sprint 1.6 - Checkout Completo
-
-Nesta sprint foi implementado o fluxo completo de compra no Demo Web Shop:
-
-- Login
-- Busca de produto
-- Adição ao carrinho
-- Aceite dos termos de serviço
-- Checkout
-- Billing Address
-- Shipping Address
-- Shipping Method
-- Payment Method
-- Confirmação do pedido
-
-### Novas classes
-
-- CompleteCheckoutPage.java
-- CompleteCheckoutSteps.java
-
-### Melhorias
-
-- Método reutilizável `selecionarPorTexto()` na BasePage
-- Esperas explícitas em métodos reutilizáveis
-- Validação da mensagem de pedido concluído
-
-### Resultado da suíte
-
-## Status Atual
-
-- 13 cenários automatizados
-- Selenium WebDriver
-- Cucumber BDD
-- JUnit 5
-- Page Object Model (POM)
-- Captura automática de evidências em falhas
-- Fluxo E2E completo de compra validado
-- Cenários positivos e negativos implementados
-
-
-## CI/CD com GitHub Actions
-
-O projeto possui integração contínua utilizando GitHub Actions.
-
-A pipeline executa automaticamente:
-
-- Build Maven
-- Execução dos testes automatizados
-- Geração dos resultados Allure
-- Publicação dos relatórios de execução
-
-## A execução ocorre em:
-
-- Push para main
-- Pull Request para main
-- Execução manual pela aba Actions
-
-## Cross Browser Testing
-
-O framework suporta execução em múltiplos navegadores através de parâmetros Maven.
-
-## Execução Paralela
-
-O projeto suporta execução paralela utilizando JUnit Platform e Cucumber.
-
-### Configuração
-
-Arquivo:
-
-src/test/resources/junit-platform.properties
-
-### Benefícios
+Benefícios:
 
 - Redução do tempo de execução
 - Melhor aproveitamento de recursos
-- Preparação para Selenium Grid
-- Compatível com CI/CD
+- Escalabilidade da suíte
 
-### Resultado
+---
 
-- Antes: ~3 minutos
-- Depois: ~1 minuto
-- Redução aproximada: 64%
+# 🌐 Cross Browser Testing
 
+O framework suporta execução nos navegadores:
 
-## Funcionalidades Implementadas
+- Google Chrome
+- Mozilla Firefox
+- Microsoft Edge
 
-- Login positivo e negativo
-- Logout
-- Cadastro positivo e negativo
-- Busca de produtos
-- Carrinho de compras
-- Checkout completo
-- Cenários negativos
-- Evidências automáticas
-- Cross Browser (Chrome e Firefox)
-- Execução Paralela com ThreadLocal
-- Pipeline CI/CD com GitHub Actions
-- Execução via Docker
+Exemplos:
 
-## Navegadores suportados:
+```bash
+mvn clean test -Dbrowser=chrome
 
-* Google Chrome
-* Microsoft Edge
-* Mozilla Firefox
+mvn clean test -Dbrowser=firefox
 
+mvn clean test -Dbrowser=edge
 ```bash
 mvn clean test -Dbrowser=chrome
 
