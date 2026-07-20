@@ -15,7 +15,8 @@ Este projeto tem como objetivo demonstrar a construção de uma arquitetura prof
 - Maven
 - IntelliJ IDEA
 - Git
-- GitHub
+- GitHub Actions
+- Docker
 
 
 ### Cenários Automatizados
@@ -194,6 +195,22 @@ src/test/resources/junit-platform.properties
 - Depois: ~1 minuto
 - Redução aproximada: 64%
 
+
+## Funcionalidades Implementadas
+
+- Login positivo e negativo
+- Logout
+- Cadastro positivo e negativo
+- Busca de produtos
+- Carrinho de compras
+- Checkout completo
+- Cenários negativos
+- Evidências automáticas
+- Cross Browser (Chrome e Firefox)
+- Execução Paralela com ThreadLocal
+- Pipeline CI/CD com GitHub Actions
+- Execução via Docker
+
 ## Navegadores suportados:
 
 * Google Chrome
@@ -221,27 +238,79 @@ BUILD SUCCESS
 ## Arquitetura do projeto
 
 projeto-automacao-selenium
+│
 ├── .github
 │   └── workflows
 │       └── selenium-ci.yml
-├── evidencias
+│
 ├── src
 │   ├── main
-│   │   └── java
-│   │       └── br.com.ezequias.automacao
-│   │           ├── core
-│   │           ├── factory
-│   │           └── pages
+│   │   ├── java
+│   │   │   └── br/com/ezequias/automacao
+│   │   │       ├── factory
+│   │   │       │   └── DriverFactory.java
+│   │   │       │
+│   │   │       ├── pages
+│   │   │       │   ├── BasePage.java
+│   │   │       │   ├── LoginPage.java
+│   │   │       │   ├── RegisterPage.java
+│   │   │       │   ├── SearchPage.java
+│   │   │       │   ├── CartPage.java
+│   │   │       │   ├── CheckoutPage.java
+│   │   │       │   └── CompleteCheckoutPage.java
+│   │   │       │
+│   │   │       └── utils
+│   │   │
+│   │   └── resources
+│   │
 │   └── test
 │       ├── java
-│       │   └── br.com.ezequias.automacao
+│       │   └── br/com/ezequias/automacao
 │       │       ├── hooks
+│       │       │   └── Hooks.java
+│       │       │
 │       │       ├── runner
+│       │       │   └── RunCucumberTest.java
+│       │       │
 │       │       └── stepdefinitions
+│       │           ├── LoginSteps.java
+│       │           ├── CadastroSteps.java
+│       │           ├── CompraSteps.java
+│       │           ├── CheckoutSteps.java
+│       │           ├── CheckoutNegativoSteps.java
+│       │           └── CompleteCheckoutSteps.java
+│       │
 │       └── resources
-│           ├── config
 │           ├── features
-│           ├── massas
-│           └── allure.properties
+│           │   ├── login.feature
+│           │   ├── cadastro.feature
+│           │   ├── compra.feature
+│           │   ├── checkout.feature
+│           │   └── checkout_negativo.feature
+│           │
+│           └── junit-platform.properties
+│
+├── evidencias
+│
+├── Dockerfile
+├── .dockerignore
 ├── pom.xml
-└── README.md
+├── README.md
+└── .gitignore
+
+
+
+## Arquitetura do Projeto
+
+O framework foi desenvolvido utilizando os padrões Page Object Model (POM) e BDD com Cucumber.
+
+### Camadas
+
+- **Pages:** encapsulam os elementos e ações das páginas.
+- **Step Definitions:** implementam os passos descritos nos cenários BDD.
+- **Hooks:** gerenciam abertura e encerramento dos navegadores.
+- **Factory:** responsável pela criação e gerenciamento dos drivers.
+- **Runner:** configuração de execução dos testes Cucumber/JUnit 5.
+- **Features:** cenários escritos em Gherkin.
+- **CI/CD:** execução automatizada via GitHub Actions.
+- **Docker:** execução dos testes em ambiente isolado e padronizado.
