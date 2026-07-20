@@ -2,6 +2,9 @@ package br.com.ezequias.automacao.pages;
 
 import java.time.Duration;
 
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -76,20 +79,34 @@ public class CartPage extends BasePage {
     private void fecharNotificacaoProdutoAdicionado() {
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(10)
+                Duration.ofSeconds(15)
         );
 
-        wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        fecharNotificacao
-                )
-        ).click();
+        try {
+            wait.until(driver -> {
+                try {
+                    driver.findElement(fecharNotificacao).click();
+                    return true;
+                } catch (
+                        org.openqa.selenium.ElementClickInterceptedException
+                        | org.openqa.selenium.StaleElementReferenceException e
+                ) {
+                    return false;
+                }
+            });
 
-        wait.until(
-                ExpectedConditions.invisibilityOfElementLocated(
-                        notificacaoProdutoAdicionado
-                )
-        );
+            wait.until(
+                    ExpectedConditions.invisibilityOfElementLocated(
+                            notificacaoProdutoAdicionado
+                    )
+            );
+
+        } catch (org.openqa.selenium.TimeoutException e) {
+            throw new IllegalStateException(
+                    "A notificação do produto não desapareceu dentro do tempo esperado.",
+                    e
+            );
+        }
     }
 
     public void acessarCarrinho() {
