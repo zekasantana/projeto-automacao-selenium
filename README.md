@@ -161,7 +161,7 @@ A pipeline executa automaticamente:
 - Geração dos resultados Allure
 - Publicação dos relatórios de execução
 
-A execução ocorre em:
+## A execução ocorre em:
 
 - Push para main
 - Pull Request para main
@@ -170,6 +170,29 @@ A execução ocorre em:
 ## Cross Browser Testing
 
 O framework suporta execução em múltiplos navegadores através de parâmetros Maven.
+
+## Execução Paralela
+
+O projeto suporta execução paralela utilizando JUnit Platform e Cucumber.
+
+### Configuração
+
+Arquivo:
+
+src/test/resources/junit-platform.properties
+
+### Benefícios
+
+- Redução do tempo de execução
+- Melhor aproveitamento de recursos
+- Preparação para Selenium Grid
+- Compatível com CI/CD
+
+### Resultado
+
+- Antes: ~3 minutos
+- Depois: ~1 minuto
+- Redução aproximada: 64%
 
 ## Navegadores suportados:
 

@@ -118,4 +118,24 @@ public class BasePage {
     protected void atualizarPagina() {
         driver.navigate().refresh();
     }
+    protected boolean aguardarTextoVisivel(
+            By elemento,
+            String textoEsperado
+    ) {
+        try {
+            WebDriverWait wait = new WebDriverWait(
+                    driver,
+                    Duration.ofSeconds(30)
+            );
+
+            return wait.until(
+                    ExpectedConditions.textToBePresentInElementLocated(
+                            elemento,
+                            textoEsperado
+                    )
+            );
+        } catch (TimeoutException e) {
+            return false;
+        }
+    }
 }

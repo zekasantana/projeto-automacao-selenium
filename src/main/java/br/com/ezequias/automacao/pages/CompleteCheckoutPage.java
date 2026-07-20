@@ -129,9 +129,8 @@ public class CompleteCheckoutPage extends BasePage {
     }
 
     public boolean pedidoRealizadoComSucesso() {
-        String mensagem = obterTexto(mensagemPedidoConcluido);
-
-        return mensagem.contains(
+        return aguardarTextoVisivel(
+                mensagemPedidoConcluido,
                 "Your order has been successfully processed!"
         );
     }
