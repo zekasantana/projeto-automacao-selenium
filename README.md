@@ -234,6 +234,19 @@ Benefícios:
 
 ---
 
+## Relatório Allure Online
+
+O relatório Allure é publicado automaticamente pelo GitHub Actions e pode ser acessado em:
+
+https://zekasantana.github.io/projeto-automacao-selenium/
+
+### Recursos
+- Histórico de execuções
+- Evidências de testes
+- Estatísticas da suíte
+- Tendências de execução
+- Integração com GitHub Pages
+
 # 🌐 Cross Browser Testing
 
 O framework suporta execução nos navegadores:
