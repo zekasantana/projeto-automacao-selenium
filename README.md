@@ -255,6 +255,14 @@ O framework suporta execução nos navegadores:
 - Mozilla Firefox
 - Microsoft Edge
 
+## Code Quality
+
+- JaCoCo (Code Coverage)
+- Checkstyle
+- PMD
+- SpotBugs
+
+
 Exemplos:
 
 ```bash
