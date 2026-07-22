@@ -88,8 +88,8 @@ public class CartPage extends BasePage {
                     driver.findElement(fecharNotificacao).click();
                     return true;
                 } catch (
-                        org.openqa.selenium.ElementClickInterceptedException
-                        | org.openqa.selenium.StaleElementReferenceException e
+                        ElementClickInterceptedException
+                        | StaleElementReferenceException e
                 ) {
                     return false;
                 }
@@ -101,7 +101,7 @@ public class CartPage extends BasePage {
                     )
             );
 
-        } catch (org.openqa.selenium.TimeoutException e) {
+        } catch (TimeoutException e) {
             throw new IllegalStateException(
                     "A notificação do produto não desapareceu dentro do tempo esperado.",
                     e
