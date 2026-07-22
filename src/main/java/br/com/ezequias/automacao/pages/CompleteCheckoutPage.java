@@ -35,12 +35,18 @@ public class CompleteCheckoutPage extends BasePage {
             );
 
     // Shipping Address
+    private final By shippingAddressSection =
+            By.id("checkout-step-shipping");
+
     private final By btnContinuarShippingAddress =
             By.cssSelector(
                     "#shipping-buttons-container input[value='Continue']"
             );
 
     // Shipping Method
+    private final By shippingMethodSection =
+            By.id("checkout-step-shipping-method");
+
     private final By shippingMethod =
             By.id("shippingoption_0");
 
@@ -50,6 +56,9 @@ public class CompleteCheckoutPage extends BasePage {
             );
 
     // Payment Method
+    private final By paymentMethodSection =
+            By.id("checkout-step-payment-method");
+
     private final By paymentMethod =
             By.id("paymentmethod_0");
 
@@ -59,12 +68,18 @@ public class CompleteCheckoutPage extends BasePage {
             );
 
     // Payment Information
+    private final By paymentInformationSection =
+            By.id("checkout-step-payment-info");
+
     private final By btnContinuarPaymentInformation =
             By.cssSelector(
                     "#payment-info-buttons-container input[value='Continue']"
             );
 
     // Confirm Order
+    private final By confirmOrderSection =
+            By.id("checkout-step-confirm-order");
+
     private final By btnConfirmarPedido =
             By.cssSelector(
                     "#confirm-order-buttons-container input[value='Confirm']"
@@ -104,24 +119,76 @@ public class CompleteCheckoutPage extends BasePage {
         }
 
         clicar(btnContinuarBilling);
+
+        if (!elementoEstaVisivel(shippingAddressSection)) {
+            throw new IllegalStateException(
+                    "A etapa Shipping Address não foi carregada após o Billing Address."
+            );
+        }
     }
 
     public void continuarEnderecoEntrega() {
+
+        if (!elementoEstaVisivel(btnContinuarShippingAddress)) {
+            throw new IllegalStateException(
+                    "O botão Continue da etapa Shipping Address não está disponível."
+            );
+        }
+
         clicar(btnContinuarShippingAddress);
+
+        if (!elementoEstaVisivel(shippingMethodSection)) {
+            throw new IllegalStateException(
+                    "A etapa Shipping Method não foi carregada."
+            );
+        }
     }
 
     public void selecionarMetodoEntrega() {
+
+        if (!elementoEstaVisivel(shippingMethod)) {
+            throw new IllegalStateException(
+                    "O método de entrega não está disponível. Verifique se o carrinho possui produto."
+            );
+        }
+
         clicar(shippingMethod);
         clicar(btnContinuarShippingMethod);
+
+        if (!elementoEstaVisivel(paymentMethodSection)) {
+            throw new IllegalStateException(
+                    "A etapa Payment Method não foi carregada."
+            );
+        }
     }
 
     public void selecionarMetodoPagamento() {
+
+        if (!elementoEstaVisivel(paymentMethod)) {
+            throw new IllegalStateException(
+                    "O método de pagamento não está disponível."
+            );
+        }
+
         clicar(paymentMethod);
         clicar(btnContinuarPaymentMethod);
+
+        if (!elementoEstaVisivel(paymentInformationSection)) {
+            throw new IllegalStateException(
+                    "A etapa Payment Information não foi carregada."
+            );
+        }
     }
 
     public void continuarInformacoesPagamento() {
+
         clicar(btnContinuarPaymentInformation);
+
+        if (!elementoEstaVisivel(confirmOrderSection)) {
+            throw new IllegalStateException(
+                    "A etapa Confirm Order não foi carregada."
+            );
+        }
     }
 
     public void confirmarPedido() {
