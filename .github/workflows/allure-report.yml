@@ -4,7 +4,7 @@ name: Allure Report
   push:
     branches:
       - main
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -27,13 +27,28 @@ jobs:
       - name: Executar testes
         run: mvn -B clean test -Dheadless=true -Dbrowser=chrome
 
-      - name: Recuperar histórico do Allure
+      - name: Verificar se a branch gh-pages existe
         if: always()
-        continue-on-error: true
+        id: verificar-gh-pages
+        shell: bash
+        run: |
+          if git ls-remote --exit-code --heads origin gh-pages; then
+            echo "existe=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "existe=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Recuperar histórico do Allure
+        if: always() && steps.verificar-gh-pages.outputs.existe == 'true'
         uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
+
+      - name: Preparar diretório na primeira publicação
+        if: always() && steps.verificar-gh-pages.outputs.existe == 'false'
+        shell: bash
+        run: mkdir -p gh-pages
 
       - name: Gerar relatório Allure
         if: always()
