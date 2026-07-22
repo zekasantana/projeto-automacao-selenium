@@ -27,13 +27,6 @@ jobs:
       - name: Executar testes
         run: mvn -B clean test -Dheadless=true -Dbrowser=chrome
 
-      - name: Recuperar histórico do Allure
-        if: always()
-        continue-on-error: true
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
 
       - name: Gerar relatório Allure
         if: always()
