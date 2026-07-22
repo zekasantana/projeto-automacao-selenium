@@ -9,6 +9,10 @@ name: Allure Report
 permissions:
   contents: write
 
+concurrency:
+  group: selenium-demo-web-shop
+  cancel-in-progress: false
+
 jobs:
   allure-report:
     runs-on: ubuntu-latest
