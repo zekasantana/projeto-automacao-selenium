@@ -1,5 +1,4 @@
-# 🚀 Projeto de Automação Selenium
-
+# 🚀 Projeto de Automação Selenium Web e API Demo Web Shop
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![Selenium](https://img.shields.io/badge/Selenium-4.x-green)
 ![Cucumber](https://img.shields.io/badge/Cucumber-BDD-brightgreen)
@@ -25,6 +24,7 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 - Automação Web
 - Testes End-to-End
 - Testes positivos e negativos
+- Testes de API Rest
 - Cross Browser Testing
 - Execução Paralela
 - Evidências Automáticas
@@ -36,18 +36,19 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 
 # 🛠 Tecnologias Utilizadas
 
-| Tecnologia | Versão |
-|------------|---------|
-| Java | 17 |
-| Selenium WebDriver | 4.x |
-| Cucumber | 7.x |
-| JUnit Platform | 1.x |
-| Maven | 3.9+ |
-| Docker | Latest |
-| GitHub Actions | CI/CD |
-| Chrome | Latest |
-| Firefox | Latest |
-| Edge | Latest |
+| Tecnologia         | Versão |
+|--------------------|--------|
+| Java               | 17     |
+| Selenium WebDriver | 4.x    |
+| Cucumber           | 7.x    |
+| JUnit Platform     | 1.x    |
+| Maven              | 3.9+   |
+| Docker             | Latest |
+| GitHub Actions     | CI/CD  |
+| Chrome             | Latest |
+| Firefox            | Latest |
+| Edge               | Latest |
+| RestAssured        | 5.x    |
 
 ---
 
@@ -216,6 +217,29 @@ Fluxo completo de compra:
 
 - Checkout sem aceitar os termos de serviço
 
+## Testes de API com RestAssured
+
+O projeto também possui testes automatizados de API utilizando RestAssured, JUnit 5 e Hamcrest.
+
+A configuração comum das requisições foi centralizada na classe `ApiBase`, utilizando `RequestSpecification` para reaproveitamento da URL base, Content-Type e configurações de log.
+
+### Endpoints automatizados
+
+| Método | Endpoint | Validação                                   |
+|---|---|---------------------------------------------|
+| GET | `/products/1` | Status 200 e campos `id`, `title` e `price` |
+| GET | `/products` | Status 200 e lista de produtos não vazia    |
+| POST | `/products` | Status 201  |
+
+### Cenários implementados
+
+- Buscar produto por ID
+- Buscar todos os produtos
+- Criar um novo produto
+- Validar status code
+- Validar campos do JSON de resposta
+- Exibir request e response em caso de falha
+
 ---
 
 # ⚡ Execução Paralela
@@ -262,6 +286,25 @@ O framework suporta execução nos navegadores:
 - PMD
 - SpotBugs
 
+## Sprint 2.9 – Testes de API com RestAssured
+
+Nesta sprint, o framework foi evoluído para uma solução híbrida de automação Web e API.
+
+### Implementações
+
+- Adição do RestAssured ao projeto
+- Criação da classe `ApiBase`
+- Centralização da configuração com `RequestSpecification`
+- Implementação de testes GET e POST
+- Validação de status code e payload JSON
+- Uso de Hamcrest para assertions
+- Integração dos testes de API com Maven e JUnit 5
+- Manutenção da compatibilidade com a suíte Selenium existente
+
+### Resultado
+
+A suíte passou a executar 16 testes com sucesso, sendo 13 cenários Web e 3 testes de API, sem falhas ou erros.
+
 
 Exemplos:
 
@@ -283,56 +326,79 @@ Gerar os resultados:
 
 mvn clean test
 
-Tests run: 13
-Failures: 0
-Errors: 0
-Skipped: 0
-BUILD SUCCESS
+
+```md
+## Resultado atual da suíte
+
+- 13 cenários Web com Selenium e Cucumber
+- 3 testes de API com RestAssured
+- 16 testes executados com sucesso
+- 0 falhas
+- 0 erros
+- 0 testes ignorados
+- BUILD SUCCESS
+
 
 ## Arquitetura do projeto
 
+O projeto utiliza uma arquitetura híbrida de automação, com testes Web utilizando Selenium WebDriver e Cucumber, além de testes de API utilizando RestAssured e JUnit 5.
+
+A estrutura segue os princípios de Page Object Model, separação de responsabilidades, reutilização de configurações e organização entre código principal, testes, recursos e pipelines.
+
+```text
 projeto-automacao-selenium
-│
 ├── .github
 │   └── workflows
-│       └── selenium-ci.yml
+│       ├── selenium-ci.yml
+│       └── allure-report.yml
+│
+├── evidencias
+│   └── screenshots geradas em caso de falha
 │
 ├── src
 │   ├── main
-│   │   ├── java
-│   │   │   └── br/com/ezequias/automacao
-│   │   │       ├── factory
-│   │   │       │   └── DriverFactory.java
-│   │   │       │
-│   │   │       ├── pages
-│   │   │       │   ├── BasePage.java
-│   │   │       │   ├── LoginPage.java
-│   │   │       │   ├── RegisterPage.java
-│   │   │       │   ├── SearchPage.java
-│   │   │       │   ├── CartPage.java
-│   │   │       │   ├── CheckoutPage.java
-│   │   │       │   └── CompleteCheckoutPage.java
-│   │   │       │
-│   │   │       └── utils
-│   │   │
-│   │   └── resources
+│   │   └── java
+│   │       └── br
+│   │           └── com
+│   │               └── ezequias
+│   │                   └── automacao
+│   │                       ├── factory
+│   │                       │   └── DriverFactory.java
+│   │                       │
+│   │                       ├── pages
+│   │                       │   ├── BasePage.java
+│   │                       │   ├── LoginPage.java
+│   │                       │   ├── RegisterPage.java
+│   │                       │   ├── SearchPage.java
+│   │                       │   ├── CartPage.java
+│   │                       │   ├── CheckoutPage.java
+│   │                       │   └── CompleteCheckoutPage.java
+│   │                       │
+│   │                       └── utils
+│   │                           └── classes utilitárias do framework
 │   │
 │   └── test
 │       ├── java
-│       │   └── br/com/ezequias/automacao
-│       │       ├── hooks
-│       │       │   └── Hooks.java
-│       │       │
-│       │       ├── runner
-│       │       │   └── RunCucumberTest.java
-│       │       │
-│       │       └── stepdefinitions
-│       │           ├── LoginSteps.java
-│       │           ├── CadastroSteps.java
-│       │           ├── CompraSteps.java
-│       │           ├── CheckoutSteps.java
-│       │           ├── CheckoutNegativoSteps.java
-│       │           └── CompleteCheckoutSteps.java
+│       │   └── br
+│       │       └── com
+│       │           └── ezequias
+│       │               └── automacao
+│       │                   ├── api
+│       │                   │   ├── ApiBase.java
+│       │                   │   └── ProductApiTest.java
+│       │                   │
+│       │                   ├── hooks
+│       │                   │   └── Hooks.java
+│       │                   │
+│       │                   ├── runner
+│       │                   │   └── RunCucumberTest.java
+│       │                   │
+│       │                   └── stepdefinitions
+│       │                       ├── LoginSteps.java
+│       │                       ├── CadastroSteps.java
+│       │                       ├── CompraSteps.java
+│       │                       ├── CheckoutSteps.java
+│       │                       └── CompleteCheckoutSteps.java
 │       │
 │       └── resources
 │           ├── features
@@ -340,18 +406,21 @@ projeto-automacao-selenium
 │           │   ├── cadastro.feature
 │           │   ├── compra.feature
 │           │   ├── checkout.feature
-│           │   └── checkout_negativo.feature
+│           │   └── complete-checkout.feature
 │           │
 │           └── junit-platform.properties
 │
-├── evidencias
+├── target
+│   ├── allure-results
+│   ├── site
+│   └── surefire-reports
 │
-├── Dockerfile
 ├── .dockerignore
+├── .gitignore
+├── checkstyle.xml
+├── Dockerfile
 ├── pom.xml
-├── README.md
-└── .gitignore
-
+└── README.md
 
 
 ## Arquitetura do Projeto
