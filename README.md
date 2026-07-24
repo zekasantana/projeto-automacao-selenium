@@ -36,19 +36,20 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 
 # 🛠 Tecnologias Utilizadas
 
-| Tecnologia         | Versão |
-|--------------------|--------|
-| Java               | 17     |
-| Selenium WebDriver | 4.x    |
-| Cucumber           | 7.x    |
-| JUnit Platform     | 1.x    |
-| Maven              | 3.9+   |
-| Docker             | Latest |
-| GitHub Actions     | CI/CD  |
-| Chrome             | Latest |
-| Firefox            | Latest |
-| Edge               | Latest |
-| RestAssured        | 5.x    |
+| Tecnologia            | Versão           |
+|-----------------------|------------------|
+| Java                  | 17               |
+| Selenium WebDriver    | 4.x              |
+| Cucumber              | 7.x              |
+| JUnit Platform        | 1.x              |
+| Maven                 | 3.9+             |
+| Docker                | Latest           |
+| GitHub Actions        | CI/CD            |
+| Chrome                | Latest           |
+| Firefox               | Latest           |
+| Edge                  | Latest           |
+| RestAssured           | 5.x              |
+| JSON Schema Validator | Contract Testing |
 
 ---
 
@@ -305,6 +306,17 @@ Nesta sprint, o framework foi evoluído para uma solução híbrida de automaç�
 
 A suíte passou a executar 16 testes com sucesso, sendo 13 cenários Web e 3 testes de API, sem falhas ou erros.
 
+### Testes de API
+- GET /products/1
+- GET /products
+- POST /products
+
+### Contract Testing
+- Validação de contrato utilizando JSON Schema
+- Verificação de campos obrigatórios
+- Verificação de tipos de dados da resposta
+- Detecção de alterações incompatíveis na API
+
 
 Exemplos:
 
@@ -331,51 +343,56 @@ mvn clean test
 ## Resultado atual da suíte
 
 - 13 cenários Web com Selenium e Cucumber
-- 3 testes de API com RestAssured
-- 16 testes executados com sucesso
+- 4 testes de API com RestAssured
+- 17 testes executados com sucesso
 - 0 falhas
 - 0 erros
 - 0 testes ignorados
 - BUILD SUCCESS
 
 
-## Arquitetura do projeto
+## Arquitetura do Projeto
 
-O projeto utiliza uma arquitetura híbrida de automação, com testes Web utilizando Selenium WebDriver e Cucumber, além de testes de API utilizando RestAssured e JUnit 5.
-
-A estrutura segue os princípios de Page Object Model, separação de responsabilidades, reutilização de configurações e organização entre código principal, testes, recursos e pipelines.
+O projeto utiliza uma arquitetura híbrida para automação de testes Web e API, organizada para facilitar manutenção, reutilização de código, escalabilidade e execução em diferentes ambientes.
 
 ```text
 projeto-automacao-selenium
+│
 ├── .github
 │   └── workflows
 │       ├── selenium-ci.yml
 │       └── allure-report.yml
 │
 ├── evidencias
-│   └── screenshots geradas em caso de falha
+│   └── screenshots de falhas
 │
 ├── src
 │   ├── main
-│   │   └── java
-│   │       └── br
-│   │           └── com
-│   │               └── ezequias
-│   │                   └── automacao
-│   │                       ├── factory
-│   │                       │   └── DriverFactory.java
-│   │                       │
-│   │                       ├── pages
-│   │                       │   ├── BasePage.java
-│   │                       │   ├── LoginPage.java
-│   │                       │   ├── RegisterPage.java
-│   │                       │   ├── SearchPage.java
-│   │                       │   ├── CartPage.java
-│   │                       │   ├── CheckoutPage.java
-│   │                       │   └── CompleteCheckoutPage.java
-│   │                       │
-│   │                       └── utils
-│   │                           └── classes utilitárias do framework
+│   │   ├── java
+│   │   │   └── br
+│   │   │       └── com
+│   │   │           └── ezequias
+│   │   │               └── automacao
+│   │   │                   ├── core
+│   │   │                   │   └── configurações gerais do framework
+│   │   │                   │
+│   │   │                   ├── factory
+│   │   │                   │   └── DriverFactory.java
+│   │   │                   │
+│   │   │                   ├── pages
+│   │   │                   │   ├── BasePage.java
+│   │   │                   │   ├── LoginPage.java
+│   │   │                   │   ├── RegisterPage.java
+│   │   │                   │   ├── SearchPage.java
+│   │   │                   │   ├── CartPage.java
+│   │   │                   │   ├── CheckoutPage.java
+│   │   │                   │   └── CompleteCheckoutPage.java
+│   │   │                   │
+│   │   │                   └── utils
+│   │   │                       └── classes utilitárias
+│   │   │
+│   │   └── resources
+│   │       └── arquivos de configuração da aplicação
 │   │
 │   └── test
 │       ├── java
@@ -398,6 +415,7 @@ projeto-automacao-selenium
 │       │                       ├── CadastroSteps.java
 │       │                       ├── CompraSteps.java
 │       │                       ├── CheckoutSteps.java
+│       │                       ├── CheckoutNegativoSteps.java
 │       │                       └── CompleteCheckoutSteps.java
 │       │
 │       └── resources
@@ -406,21 +424,78 @@ projeto-automacao-selenium
 │           │   ├── cadastro.feature
 │           │   ├── compra.feature
 │           │   ├── checkout.feature
-│           │   └── complete-checkout.feature
+│           │   └── checkout_negativo.feature
+│           │
+│           ├── schemas
+│           │   └── product-schema.json
 │           │
 │           └── junit-platform.properties
 │
 ├── target
 │   ├── allure-results
+│   ├── surefire-reports
 │   ├── site
-│   └── surefire-reports
+│   │   └── jacoco
+│   └── resultados gerados pelo Maven
 │
 ├── .dockerignore
 ├── .gitignore
-├── checkstyle.xml
 ├── Dockerfile
 ├── pom.xml
 └── README.md
+
+┌──────────────────────────────────────────────────────────────┐
+│                    CAMADA DE AUTOMAÇÃO                       │
+├───────────────────────────────┬──────────────────────────────┤
+│          TESTES WEB           │          TESTES API          │
+│                               │                              │
+│ Selenium WebDriver            │ RestAssured                  │
+│ Cucumber BDD                  │ JUnit 5                      │
+│ Page Object Model             │ Hamcrest                     │
+│ JUnit Platform                │ JSON Schema Validator        │
+│                               │                              │
+└───────────────────────────────┴──────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    CAMADA DE ESTRUTURA                       │
+├───────────────────────────────┬──────────────────────────────┤
+│ DriverFactory                 │ ApiBase                      │
+│ BasePage                      │ RequestSpecification         │
+│ Hooks                         │ Schemas JSON                 │
+│ Step Definitions              │ Testes de contrato           │
+└───────────────────────────────┴──────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    CAMADA DE QUALIDADE                       │
+├──────────────────────────────────────────────────────────────┤
+│ Checkstyle                                                   │
+│ PMD                                                          │
+│ SpotBugs                                                     │
+│ JaCoCo                                                       │
+└──────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    EXECUÇÃO E ENTREGA                        │
+├───────────────────────────────┬──────────────────────────────┤
+│ Execução Local                │ Integração Contínua          │
+│ Maven                         │ GitHub Actions               │
+│ Chrome / Firefox              │ Execução Headless            │
+│ Docker                        │ Publicação Allure            │
+└───────────────────────────────┴──────────────────────────────┘
+                              │
+                              ▼
+┌──────────────────────────────────────────────────────────────┐
+│                      RELATÓRIOS                              │
+├──────────────────────────────────────────────────────────────┤
+│ Allure Report                                                │
+│ GitHub Pages                                                 │
+│ JaCoCo Report                                                │
+│ Surefire Reports                                             │
+│ Screenshots de falhas                                        │
+└──────────────────────────────────────────────────────────────┘
 
 
 ## Arquitetura do Projeto
