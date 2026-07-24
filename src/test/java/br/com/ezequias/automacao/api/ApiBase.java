@@ -1,23 +1,26 @@
 package br.com.ezequias.automacao.api;
 
-import io.restassured.RestAssured;
+import org.junit.jupiter.api.Test;
+
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeEach;
+import static org.hamcrest.Matchers.*;
+
+import static io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails;
 
 public class ApiBase {
 
-    protected static final RequestSpecification REQUEST_SPEC =
-            new RequestSpecBuilder()
-                    .setBaseUri("https://fakestoreapi.com")
-                    .setContentType(ContentType.JSON)
-                    .build();
+    protected RequestSpecification requestSpecification;
 
-    static {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
+    @BeforeEach
+    protected void configurarApi() {
 
-    protected ApiBase() {
+        enableLoggingOfRequestAndResponseIfValidationFails();
 
+        requestSpecification = new RequestSpecBuilder()
+                .setBaseUri("https://fakestoreapi.com")
+                .setContentType("application/json")
+                .build();
     }
 }
