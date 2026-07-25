@@ -18,9 +18,22 @@
 
         <selenium.version>4.40.0</selenium.version>
         <cucumber.version>7.22.2</cucumber.version>
-        <junit.platform.version>1.12.2</junit.platform.version>
+        <junit.version>5.13.2</junit.version>
         <allure.version>2.34.0</allure.version>
+        <rest.assured.version>5.5.0</rest.assured.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -47,11 +60,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Assertions do JUnit 5 -->
+        <!-- Assertions e execução JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.12.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -59,7 +71,13 @@
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
-            <version>${junit.platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- JUnit Platform Launcher -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -71,6 +89,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Integração Allure com testes JUnit 5/API -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${allure.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Manipulação de arquivos para evidências -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -78,17 +104,19 @@
             <version>2.20.0</version>
         </dependency>
 
+        <!-- Testes de API -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>5.5.0</version>
+            <version>${rest.assured.version}</version>
             <scope>test</scope>
         </dependency>
 
+        <!-- Validação de contrato JSON Schema -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>5.5.0</version>
+            <version>${rest.assured.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -116,8 +144,16 @@
 
                 <configuration>
                     <useModulePath>false</useModulePath>
+
+                    <systemPropertyVariables>
+                        <allure.results.directory>
+                            ${project.build.directory}/allure-results
+                        </allure.results.directory>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
+
+            <!-- Cobertura de código -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -125,13 +161,14 @@
 
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
 
                     <execution>
-                        <id>report</id>
+                        <id>jacoco-report</id>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
@@ -139,6 +176,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Análise de padrão de código -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -150,6 +189,7 @@
 
                 <executions>
                     <execution>
+                        <id>checkstyle-check</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
@@ -157,6 +197,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Análise estática PMD -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
@@ -178,6 +220,8 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Análise estática SpotBugs -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
