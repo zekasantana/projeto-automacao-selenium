@@ -1,35 +1,27 @@
 package br.com.ezequias.automacao.api;
 
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.BeforeEach;
-
-import static io.restassured.RestAssured
-        .enableLoggingOfRequestAndResponseIfValidationFails;
+import org.junit.jupiter.api.BeforeAll;
 
 public class ApiBase {
 
-    private static final String DEFAULT_BASE_URI =
-            "https://fakestoreapi.com";
+    protected static RequestSpecification requestSpecification;
 
-    protected RequestSpecification requestSpecification;
-
-    @BeforeEach
-    protected void configurarApi() {
-
-        enableLoggingOfRequestAndResponseIfValidationFails();
-
-        String baseUri = System.getProperty(
-                "api.base.uri",
-                System.getenv().getOrDefault(
-                        "API_BASE_URI",
-                        DEFAULT_BASE_URI
-                )
-        );
-
+    @BeforeAll
+    static void configurarApi() {
         requestSpecification = new RequestSpecBuilder()
-                .setBaseUri(baseUri)
-                .setContentType("application/json")
+                .setBaseUri("https://fakestoreapi.com")
+                .addHeader("Accept", "application/json")
+                .addHeader(
+                        "User-Agent",
+                        "Mozilla/5.0 QA-Automation-Portfolio GitHub-Actions"
+                )
+                .log(LogDetail.ALL)
                 .build();
+
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 }

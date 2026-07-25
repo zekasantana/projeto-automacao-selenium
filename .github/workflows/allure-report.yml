@@ -29,6 +29,8 @@ jobs:
           cache: maven
 
       - name: Executar testes
+        id: testes
+        continue-on-error: true
         run: mvn -B clean test -Dheadless=true -Dbrowser=chrome
 
       - name: Verificar se a branch gh-pages existe
@@ -71,3 +73,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+
+      - name: Validar resultado dos testes
+        if: steps.testes.outcome == 'failure'
+        run: exit 1
