@@ -29,7 +29,22 @@ jobs:
           cache: maven
 
       - name: Executar testes
+        id: testes
+        continue-on-error: true
         run: mvn -B clean test -Dheadless=true -Dbrowser=chrome
+
+      - name: Diagnosticar resultados do Allure
+        if: always()
+        shell: bash
+        run: |
+          echo "=== Conteúdo de target ==="
+          ls -la target || true
+                
+          echo "=== Conteúdo de target/allure-results ==="
+          ls -la target/allure-results || true
+                
+          echo "=== Quantidade de result.json ==="
+          find target/allure-results -name "*-result.json" 2>/dev/null | wc -l
 
       - name: Verificar se a branch gh-pages existe
         if: always()
@@ -42,27 +57,35 @@ jobs:
             echo "existe=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Recuperar histórico do Allure
-        if: always() && steps.verificar-gh-pages.outputs.existe == 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: gh-pages
+      - name: Recuperar histórico do relatório
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p target/allure-results/history
+            
+            if [ -d "gh-pages/history" ]; then
+              echo "Recuperando histórico do novo formato..."
+              cp -r gh-pages/history/. target/allure-results/history/
+            
+            elif [ -d "gh-pages/last-history" ]; then
+              echo "Migrando histórico do formato antigo..."
+              cp -r gh-pages/last-history/. target/allure-results/history/
+            
+            else
+              echo "Nenhum histórico anterior encontrado."
+            fi
 
       - name: Preparar diretório na primeira publicação
         if: always() && steps.verificar-gh-pages.outputs.existe == 'false'
         shell: bash
         run: mkdir -p gh-pages
 
-      - name: Gerar relatório Allure
+      - name: Instalar Allure CLI
         if: always()
-        uses: simple-elf/allure-report-action@v1.14
-        with:
-          gh_pages: gh-pages
-          allure_results: target/allure-results
-          allure_report: allure-report
-          allure_history: allure-history
-          keep_reports: 20
+        shell: bash
+        run: |
+            npm install -g allure-commandline --save-dev
+            allure --version
 
       - name: Publicar relatório no GitHub Pages
         if: always()
@@ -71,3 +94,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+
+      - name: Validar resultado dos testes
+        if: steps.testes.outcome == 'failure'
+        run: exit 1
