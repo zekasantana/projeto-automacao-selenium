@@ -33,19 +33,6 @@ jobs:
         continue-on-error: true
         run: mvn -B clean test -Dheadless=true -Dbrowser=chrome
 
-      - name: Diagnosticar resultados do Allure
-        if: always()
-        shell: bash
-        run: |
-          echo "=== Conteúdo de target ==="
-          ls -la target || true
-
-          echo "=== Conteúdo de target/allure-results ==="
-          ls -la target/allure-results || true
-
-          echo "=== Quantidade de result.json ==="
-          find target/allure-results -name "*-result.json" 2>/dev/null | wc -l
-
       - name: Verificar se a branch gh-pages existe
         if: always()
         id: verificar-gh-pages
