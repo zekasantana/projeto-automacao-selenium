@@ -1,5 +1,6 @@
 Feature: Login
 
+  @smoke @regression
   Scenario: Realizar login com sucesso
 
     Given que o usuário está na página inicial
@@ -7,7 +8,7 @@ Feature: Login
     And informa um usuário e senha válidos
     Then deve visualizar a página inicial autenticada
 
-
+  @regression
   Scenario: Realizar login com credenciais inválidas
 
     Given que o usuário está na página inicial
@@ -15,7 +16,7 @@ Feature: Login
     And informa um usuário e senha inválidos
     Then devo visualizar uma mensagem de erro
 
-
+  @smoke @regression
   Scenario: Realizar logout com sucesso
 
     Given que o usuário está na página inicial
@@ -25,7 +26,7 @@ Feature: Login
     Then deve visualizar a pagina de login
 
 
-
+  @regression
   Scenario: Tentar realizar login com campos vazios
 
     Given que o usuário está na página inicial

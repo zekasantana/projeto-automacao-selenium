@@ -317,6 +317,47 @@ A suíte passou a executar 16 testes com sucesso, sendo 13 cenários Web e 3 tes
 - Verificação de tipos de dados da resposta
 - Detecção de alterações incompatíveis na API
 
+## Estratégia de Execução — Smoke e Regression
+
+O projeto utiliza tags do Cucumber para separar os cenários de teste de acordo com o objetivo da execução.
+
+### Smoke Tests
+
+Os testes `@smoke` representam os principais fluxos críticos da aplicação e permitem uma validação rápida das funcionalidades essenciais.
+
+Atualmente, a suíte Smoke contém 5 cenários:
+
+- Login com sucesso
+- Logout com sucesso
+- Cadastro de usuário com sucesso
+- Adição de produto ao carrinho
+- Acesso ao checkout
+
+Para executar somente os testes Smoke:
+
+```bash
+mvn clean test '-Dcucumber.filter.tags=@smoke'
+
+Para executar somente a regressão:
+
+```bash
+mvn clean test '-Dcucumber.filter.tags=@regression'
+
+
+
+```text
+Smoke
+ ├── Chrome
+ ├── Firefox
+ └── Edge
+
+Regression
+ └── Chrome
+
+Full Suite
+ ├── Web
+ ├── API
+ └── Contract Testing
 
 Exemplos:
 
