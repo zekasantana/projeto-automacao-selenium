@@ -2,6 +2,9 @@ package br.com.ezequias.automacao.factory;
 
 import java.time.Duration;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -46,6 +49,26 @@ public class DriverFactory {
                 )
         );
 
+        boolean grid = Boolean.parseBoolean(
+                System.getProperty("grid", "false")
+        );
+
+        String gridUrl = System.getProperty(
+                "grid.url",
+                "http://localhost:4444"
+        );
+
+        System.out.println(
+                "Execução via Selenium Grid: " + grid
+
+        );
+
+        if (grid) {
+            System.out.println(
+                    "URL do Selenium Grid: " + gridUrl
+            );
+        }
+
         System.out.println(
                 "Thread: " + Thread.currentThread().getName()
         );
@@ -61,24 +84,32 @@ public class DriverFactory {
 
         WebDriver navegador;
 
-        switch (browser) {
-            case "chrome":
-                navegador = criarChromeDriver(headless);
-                break;
+        if (grid) {
+            navegador = criarRemoteDriver(
+                    browser,
+                    headless,
+                    gridUrl
+            );
+        } else {
+            switch (browser) {
+                case "chrome":
+                    navegador = criarChromeDriver(headless);
+                    break;
 
-            case "edge":
-                navegador = criarEdgeDriver(headless);
-                break;
+                case "edge":
+                    navegador = criarEdgeDriver(headless);
+                    break;
 
-            case "firefox":
-                navegador = criarFirefoxDriver(headless);
-                break;
+                case "firefox":
+                    navegador = criarFirefoxDriver(headless);
+                    break;
 
-            default:
-                throw new IllegalArgumentException(
-                        "Navegador não suportado: " + browser
-                                + ". Utilize chrome, edge ou firefox."
-                );
+                default:
+                    throw new IllegalArgumentException(
+                            "Navegador não suportado: " + browser
+                                    + ". Utilize chrome, edge ou firefox."
+                    );
+            }
         }
 
         navegador.manage()
@@ -96,7 +127,7 @@ public class DriverFactory {
         return navegador;
     }
 
-    private static WebDriver criarChromeDriver(boolean headless) {
+    private static ChromeOptions criarChromeOptions(boolean headless) {
         ChromeOptions options = new ChromeOptions();
 
         if (headless) {
@@ -110,10 +141,16 @@ public class DriverFactory {
                 "--window-size=1920,1080"
         );
 
-        return new ChromeDriver(options);
+        return options;
     }
 
-    private static WebDriver criarEdgeDriver(boolean headless) {
+    private static WebDriver criarChromeDriver(boolean headless) {
+        return new ChromeDriver(
+                criarChromeOptions(headless)
+        );
+    }
+
+    private static EdgeOptions criarEdgeOptions(boolean headless) {
         EdgeOptions options = new EdgeOptions();
 
         options.setPageLoadStrategy(PageLoadStrategy.EAGER);
@@ -129,10 +166,16 @@ public class DriverFactory {
                 "--window-size=1920,1080"
         );
 
-        return new EdgeDriver(options);
+        return options;
     }
 
-    private static WebDriver criarFirefoxDriver(boolean headless) {
+    private static WebDriver criarEdgeDriver(boolean headless) {
+        return new EdgeDriver(
+                criarEdgeOptions(headless)
+        );
+    }
+
+    private static FirefoxOptions criarFirefoxOptions(boolean headless) {
         FirefoxOptions options = new FirefoxOptions();
 
         if (headless) {
@@ -142,7 +185,65 @@ public class DriverFactory {
         options.addArguments("--width=1920");
         options.addArguments("--height=1080");
 
-        return new FirefoxDriver(options);
+        return options;
+    }
+
+    private static WebDriver criarFirefoxDriver(boolean headless) {
+        return new FirefoxDriver(
+                criarFirefoxOptions(headless)
+        );
+    }
+
+    private static WebDriver criarRemoteDriver(
+            String browser,
+            boolean headless,
+            String gridUrl
+    ) {
+
+        try {
+            URL remoteUrl = new URL(gridUrl);
+
+            switch (browser) {
+                case "chrome":
+                    ChromeOptions chromeOptions =
+                            criarChromeOptions(headless);
+
+                    return new RemoteWebDriver(
+                            remoteUrl,
+                            chromeOptions
+                    );
+
+                case "edge":
+                    EdgeOptions edgeOptions =
+                            criarEdgeOptions(headless);
+
+                    return new RemoteWebDriver(
+                            remoteUrl,
+                            edgeOptions
+                    );
+
+                case "firefox":
+                    FirefoxOptions firefoxOptions =
+                            criarFirefoxOptions(headless);
+
+                    return new RemoteWebDriver(
+                            remoteUrl,
+                            firefoxOptions
+                    );
+
+                default:
+                    throw new IllegalArgumentException(
+                            "Navegador não suportado no Grid: "
+                                    + browser
+                    );
+            }
+
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(
+                    "URL do Selenium Grid inválida: " + gridUrl,
+                    e
+            );
+        }
     }
 
     public static void quitDriver() {
@@ -157,6 +258,8 @@ public class DriverFactory {
                  * de memória e reutilização indevida do navegador.
                  */
                 DRIVER.remove();
+
+
             }
         }
     }
