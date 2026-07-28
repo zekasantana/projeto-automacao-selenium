@@ -2,6 +2,7 @@ package br.com.ezequias.automacao.factory;
 
 import java.time.Duration;
 
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -114,6 +115,8 @@ public class DriverFactory {
 
     private static WebDriver criarEdgeDriver(boolean headless) {
         EdgeOptions options = new EdgeOptions();
+
+        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
 
         if (headless) {
             options.addArguments("--headless=new");
