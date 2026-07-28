@@ -1,5 +1,9 @@
 package br.com.ezequias.automacao.pages;
 
+import java.time.Duration;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.openqa.selenium.By;
 
 public class CompleteCheckoutPage extends BasePage {
@@ -192,8 +196,30 @@ public class CompleteCheckoutPage extends BasePage {
     }
 
     public void confirmarPedido() {
+
+        if (!elementoEstaVisivel(btnConfirmarPedido)) {
+            throw new IllegalStateException(
+                    "O botão Confirm não está disponível."
+            );
+        }
+
         clicar(btnConfirmarPedido);
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(60)
+
+        );
+
+        wait.until(
+                ExpectedConditions.textToBePresentInElementLocated(
+                        mensagemPedidoConcluido,
+                        "Your order has been successfully processed!"
+
+                )
+        );
     }
+
 
     public boolean pedidoRealizadoComSucesso() {
         return aguardarTextoVisivel(
