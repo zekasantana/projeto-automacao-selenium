@@ -29,6 +29,9 @@ public class CartPage extends BasePage {
     private final By mensagemCarrinhoVazio =
             By.cssSelector(".order-summary-content");
 
+    private final By quantidadeCarrinho =
+            By.cssSelector(".cart-qty");
+
     public void adicionarAoCarrinho() {
         tentarAdicionarProduto();
 
@@ -44,7 +47,22 @@ public class CartPage extends BasePage {
         }
 
         aguardarProdutoSerAdicionado();
+        aguardarCarrinhoAtualizar();
         fecharNotificacaoProdutoAdicionado();
+    }
+
+    private void aguardarCarrinhoAtualizar() {
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(15)
+        );
+
+        wait.until(driver -> {
+            String quantidade =
+                    driver.findElement(quantidadeCarrinho).getText();
+
+            return !quantidade.contains("(0)");
+        });
     }
 
     private void tentarAdicionarProduto() {
@@ -114,7 +132,19 @@ public class CartPage extends BasePage {
     }
 
     public boolean produtoEstaNoCarrinho() {
-        return elementoEstaVisivel(produtoCarrinho);
+        try {
+            new WebDriverWait(driver, Duration.ofSeconds(15))
+                    .until(
+                            ExpectedConditions.visibilityOfElementLocated(
+                                    produtoCarrinho
+                            )
+                    );
+            return true;
+
+        } catch (TimeoutException e) {
+            return false;
+        }
+
     }
 
     public String obterMensagemCarrinho() {
