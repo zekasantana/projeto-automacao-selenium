@@ -321,6 +321,20 @@ A suíte passou a executar 16 testes com sucesso, sendo 13 cenários Web e 3 tes
 
 O projeto utiliza tags do Cucumber para separar os cenários de teste de acordo com o objetivo da execução.
 
+### Sprint 3.2 — Matriz Cross-Browser no GitHub Actions
+
+Nesta sprint, a pipeline de CI/CD foi evoluída para suportar uma estratégia de execução cross-browser, separando as suítes Web e API.
+
+#### Estratégia de execução
+
+| Suíte | Navegador | Execução |
+|---|---|---|
+| Smoke | Chrome | 5 cenários |
+| Smoke | Firefox | 5 cenários |
+| Smoke | Edge | 5 cenários |
+| Regression | Chrome | 13 cenários |
+| API | Não aplicável | 4 testes |
+
 ### Smoke Tests
 
 Os testes `@smoke` representam os principais fluxos críticos da aplicação e permitem uma validação rápida das funcionalidades essenciais.
@@ -332,6 +346,18 @@ Atualmente, a suíte Smoke contém 5 cenários:
 - Cadastro de usuário com sucesso
 - Adição de produto ao carrinho
 - Acesso ao checkout
+
+#### Implementações
+
+- Matriz de navegadores utilizando strategy.matrix no GitHub Actions.
+- Execução dos testes @smoke em Chrome, Firefox e Edge.
+- Execução da suíte @regression completa no Chrome.
+- Separação dos testes Web e API através do Maven.
+- Job independente para testes de API com RestAssured.
+- Execução Web em modo headless no ambiente CI.
+- fail-fast: false para permitir a conclusão de toda a matriz mesmo em caso de falha em um navegador.
+- Artefatos Allure e Surefire separados por suíte e navegador.
+- Estabilização do fluxo E2E de checkout com espera explícita para processamento da confirmação do pedido.
 
 Para executar somente os testes Smoke:
 
@@ -345,19 +371,21 @@ mvn clean test '-Dcucumber.filter.tags=@regression'
 
 
 
+#### Arquitetura da pipeline
+
 ```text
-Smoke
- ├── Chrome
- ├── Firefox
- └── Edge
-
-Regression
- └── Chrome
-
-Full Suite
- ├── Web
- ├── API
- └── Contract Testing
+GitHub Actions
+│
+├── Smoke Cross-Browser
+│   ├── Chrome  → @smoke
+│   ├── Firefox → @smoke
+│   └── Edge    → @smoke
+│
+├── Regression Web
+│   └── Chrome → @regression
+│
+└── API
+    └── RestAssured
 
 Exemplos:
 
