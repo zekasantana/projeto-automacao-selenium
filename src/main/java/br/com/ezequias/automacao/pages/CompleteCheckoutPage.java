@@ -175,6 +175,16 @@ public class CompleteCheckoutPage extends BasePage {
         }
 
         clicar(paymentMethod);
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(10)
+        );
+
+        wait.until(
+                ExpectedConditions.elementToBeSelected(paymentMethod)
+        );
+
         clicar(btnContinuarPaymentMethod);
 
         if (!elementoEstaVisivel(paymentInformationSection)) {
