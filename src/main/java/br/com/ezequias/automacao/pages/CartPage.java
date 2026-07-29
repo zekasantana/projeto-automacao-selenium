@@ -15,7 +15,7 @@ public class CartPage extends BasePage {
             By.cssSelector("input[value='Add to cart']");
 
     private final By linkCarrinho =
-            By.cssSelector("span.cart-label");
+            By.cssSelector("a.ico-cart");
 
     private final By notificacaoProdutoAdicionado =
             By.cssSelector("#bar-notification.success");
@@ -25,6 +25,9 @@ public class CartPage extends BasePage {
 
     private final By produtoCarrinho =
             By.linkText("14.1-inch Laptop");
+
+    private final By paginaCarrinho =
+            By.cssSelector(".shopping-cart-page");
 
     private final By mensagemCarrinhoVazio =
             By.cssSelector(".order-summary-content");
@@ -129,6 +132,21 @@ public class CartPage extends BasePage {
 
     public void acessarCarrinho() {
         clicar(linkCarrinho);
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(15)
+        );
+
+        wait.until(
+                ExpectedConditions.urlContains("/cart")
+        );
+
+        wait.until(
+                ExpectedConditions.presenceOfElementLocated(
+                        paginaCarrinho
+                )
+        );
     }
 
     public boolean produtoEstaNoCarrinho() {
