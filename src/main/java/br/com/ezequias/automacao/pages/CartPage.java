@@ -24,7 +24,7 @@ public class CartPage extends BasePage {
             By.cssSelector("#bar-notification .close");
 
     private final By produtoCarrinho =
-            By.linkText("14.1-inch Laptop");
+            By.cssSelector(".cart-item-row .product a");
 
     private final By paginaCarrinho =
             By.cssSelector(".shopping-cart-page");
@@ -150,19 +150,35 @@ public class CartPage extends BasePage {
     }
 
     public boolean produtoEstaNoCarrinho() {
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(20)
+        );
+
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(15))
-                    .until(
-                            ExpectedConditions.visibilityOfElementLocated(
-                                    produtoCarrinho
-                            )
-                    );
-            return true;
+            return wait.until(driver -> {
+                try {
+                    return driver.findElements(produtoCarrinho)
+                            .stream()
+                            .anyMatch(produto ->
+                                    produto.isDisplayed()
+                                            && produto.getText()
+                                            .trim()
+                                            .equals("14.1-inch Laptop")
+                            );
+
+                } catch (StaleElementReferenceException e) {
+                    return false;
+                }
+            });
 
         } catch (TimeoutException e) {
+            System.out.println(
+                    "Produto não encontrado no carrinho dentro do tempo esperado."
+            );
+
             return false;
         }
-
     }
 
     public String obterMensagemCarrinho() {
