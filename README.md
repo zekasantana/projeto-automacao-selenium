@@ -257,6 +257,19 @@ Benefícios:
 - Melhor aproveitamento de recursos
 - Escalabilidade da suíte
 
+## Selenium Grid
+
+O framework suporta execução remota e distribuída utilizando Selenium Grid com Docker.
+
+A infraestrutura é composta por:
+
+- Selenium Hub
+- Google Chrome Node
+- Mozilla Firefox Node
+- Microsoft Edge Node
+
+Os navegadores são executados em containers Docker e as sessões são gerenciadas pelo Selenium Hub.
+
 ---
 
 ## Relatório Allure Online
@@ -370,23 +383,6 @@ Para executar somente a regressão:
 mvn clean test '-Dcucumber.filter.tags=@regression'
 
 
-
-#### Arquitetura da pipeline
-
-```text
-GitHub Actions
-│
-├── Smoke Cross-Browser
-│   ├── Chrome  → @smoke
-│   ├── Firefox → @smoke
-│   └── Edge    → @smoke
-│
-├── Regression Web
-│   └── Chrome → @regression
-│
-└── API
-    └── RestAssured
-
 Exemplos:
 
 ```bash
@@ -423,6 +419,27 @@ mvn clean test
 ## Arquitetura do Projeto
 
 O projeto utiliza uma arquitetura híbrida para automação de testes Web e API, organizada para facilitar manutenção, reutilização de código, escalabilidade e execução em diferentes ambientes.
+
+### Arquitetura
+
+```text
+                    Testes Automatizados
+                            |
+                     DriverFactory
+                            |
+              +-------------+-------------+
+              |                           |
+        Execução Local              Execução Remota
+              |                           |
+        WebDriver Local              RemoteWebDriver
+                                          |
+                                   Selenium Grid Hub
+                                   localhost:4444
+                                          |
+                         +----------------+----------------+
+                         |                |                |
+                      Chrome          Firefox            Edge
+                       Node             Node              Node
 
 ```text
 projeto-automacao-selenium
