@@ -1,6 +1,10 @@
 package br.com.ezequias.automacao.pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
 
@@ -12,7 +16,6 @@ public class LoginPage extends BasePage {
 
     private final By mensagemErro =
             By.cssSelector(".validation-summary-errors");
-
 
     public void acessarLogin() {
         driver.get("https://demowebshop.tricentis.com/login");
@@ -36,6 +39,20 @@ public class LoginPage extends BasePage {
         clicarEntrar();
     }
 
+    public void aguardarLoginRealizado() {
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(20)
+        );
+
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        linkLogout
+                )
+        );
+    }
+
     public boolean loginRealizadoComSucesso() {
         return elementoEstaVisivel(linkLogout);
     }
@@ -45,13 +62,10 @@ public class LoginPage extends BasePage {
     }
 
     public void realizarLogout() {
-        driver.findElement(linkLogout).click();
-
+        clicar(linkLogout);
     }
 
     public boolean estaNaPaginaLogin() {
-        return driver.findElement(linkLogin).isDisplayed();
-
+        return elementoEstaVisivel(linkLogin);
     }
-
 }
