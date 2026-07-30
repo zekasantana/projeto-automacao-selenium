@@ -1,6 +1,8 @@
 package br.com.ezequias.automacao.pages;
 
 import java.time.Duration;
+
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -198,22 +200,21 @@ public class CompleteCheckoutPage extends BasePage {
 
         clicar(btnContinuarPaymentInformation);
 
-        if (!elementoEstaVisivel(confirmOrderSection)) {
-            throw new IllegalStateException(
-                    "A etapa Confirm Order não foi carregada."
-            );
-        }
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(20)
+        );
+
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        confirmOrderSection
+
+                )
+        );
+
     }
 
     public void confirmarPedido() {
-
-        if (!elementoEstaVisivel(btnConfirmarPedido)) {
-            throw new IllegalStateException(
-                    "O botão Confirm não está disponível."
-            );
-        }
-
-        clicar(btnConfirmarPedido);
 
         WebDriverWait wait = new WebDriverWait(
                 driver,
@@ -221,13 +222,28 @@ public class CompleteCheckoutPage extends BasePage {
 
         );
 
+        WebElement botaoConfirmar = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        btnConfirmarPedido
+
+                )
+        );
+
+        botaoConfirmar.click();
+
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        mensagemPedidoConcluido
+                )
+        );
+
         wait.until(
                 ExpectedConditions.textToBePresentInElementLocated(
                         mensagemPedidoConcluido,
                         "Your order has been successfully processed!"
-
                 )
         );
+
     }
 
 
