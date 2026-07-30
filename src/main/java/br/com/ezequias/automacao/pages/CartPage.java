@@ -26,6 +26,13 @@ public class CartPage extends BasePage {
     private final By produtoCarrinho =
             By.cssSelector(".cart-item-row .product a");
 
+    private final By produtoEsperadoCarrinho =
+            By.xpath(
+                    "//tr[contains(@class,'cart-item-row')]"
+                            + "//td[contains(@class,'product')]"
+                            + "//a[normalize-space()='14.1-inch Laptop']"
+            );
+
     private final By paginaCarrinho =
             By.cssSelector(".shopping-cart-page");
 
@@ -135,7 +142,7 @@ public class CartPage extends BasePage {
 
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(15)
+                Duration.ofSeconds(20)
         );
 
         wait.until(
@@ -150,34 +157,48 @@ public class CartPage extends BasePage {
     }
 
     public boolean produtoEstaNoCarrinho() {
+
         WebDriverWait wait = new WebDriverWait(
                 driver,
                 Duration.ofSeconds(20)
         );
 
         try {
-            return wait.until(driver -> {
-                try {
-                    return driver.findElements(produtoCarrinho)
-                            .stream()
-                            .anyMatch(produto ->
-                                    produto.isDisplayed()
-                                            && produto.getText()
-                                            .trim()
-                                            .equals("14.1-inch Laptop")
-                            );
 
-                } catch (StaleElementReferenceException e) {
-                    return false;
-                }
-            });
-
-        } catch (TimeoutException e) {
-            System.out.println(
-                    "Produto não encontrado no carrinho dentro do tempo esperado."
+            wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            produtoEsperadoCarrinho
+                    )
             );
 
-            return false;
+            return true;
+
+        } catch (TimeoutException e) {
+
+            System.out.println(
+                    "Produto não encontrado no carrinho na primeira tentativa. Atualizando a página."
+            );
+
+            driver.navigate().refresh();
+
+            try {
+
+                wait.until(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                produtoEsperadoCarrinho
+                        )
+                );
+
+                return true;
+
+            } catch (TimeoutException segundaTentativa) {
+
+                System.out.println(
+                        "Produto não encontrado no carrinho após atualizar a página."
+                );
+
+                return false;
+            }
         }
     }
 
