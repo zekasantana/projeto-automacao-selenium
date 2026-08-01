@@ -1,6 +1,5 @@
 package br.com.ezequias.automacao.utils;
 
-import br.com.ezequias.automacao.utils.TestData;
 
 public final class TestData {
 
