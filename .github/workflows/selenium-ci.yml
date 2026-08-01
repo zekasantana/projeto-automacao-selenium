@@ -27,10 +27,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser:
-          - chrome
-          - firefox
-          - edge
+        include:
+          - browser: chrome
+            user_secret: QA_USER_CHROME
+
+          - browser: firefox
+            user_secret: QA_USER_FIREFOX
+
+          - browser: edge
+            user_secret: QA_USER_EDGE
 
     steps:
       - name: Baixar código do repositório
@@ -49,11 +54,16 @@ jobs:
           mvn -version
 
       - name: Executar Smoke no ${{ matrix.browser }}
+        env:
+          TEST_USER_EMAIL: ${{ secrets[matrix.user_secret] }}
+          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn clean test
           -Dtest=RunCucumberTest
           -Dbrowser=${{ matrix.browser }}
           -Dheadless=true
+          -Dtest.user.email="$TEST_USER_EMAIL"
+          -Dtest.user.password="$TEST_USER_PASSWORD"
           -Dcucumber.filter.tags="@smoke"
 
       - name: Publicar resultados do Allure
@@ -97,11 +107,16 @@ jobs:
           google-chrome --version
 
       - name: Executar Regression no Chrome
+        env:
+          TEST_USER_EMAIL: ${{ secrets.QA_USER_REGRESSION }}
+          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn clean test
           -Dtest=RunCucumberTest
           -Dbrowser=chrome
           -Dheadless=true
+          -Dtest.user.email="$TEST_USER_EMAIL"
+          -Dtest.user.password="$TEST_USER_PASSWORD"
           -Dcucumber.filter.tags="@regression"
 
       - name: Publicar resultados do Allure
@@ -185,15 +200,20 @@ jobs:
           cache: maven
 
       - name: Executar testes e gerar cobertura
+        env:
+          TEST_USER_EMAIL: ${{ secrets.QA_USER_SONAR }}
+          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn -B clean test
           -Dheadless=true
-          -Dbrowser=chrome 
+          -Dbrowser=chrome
+          -Dtest.user.email="$TEST_USER_EMAIL"
+          -Dtest.user.password="$TEST_USER_PASSWORD"
 
       - name: Executar análise no SonarQube Cloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
-          mvn -B 
+          mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.projectKey=zekasantana_projeto-automacao-selenium

@@ -1,5 +1,6 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
+import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.HomePage;
 import br.com.ezequias.automacao.pages.LoginPage;
 import io.cucumber.java.en.And;
@@ -27,8 +28,8 @@ public class LoginSteps {
     @When("informa um usuário e senha válidos")
     public void informaUmUsuarioESenhaValidos() {
         loginPage.realizarLogin(
-                "teste2022@teste.com.br",
-                "teste@"
+                TestData.email(),
+                TestData.senha()
         );
     }
 

@@ -1,5 +1,6 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
+import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.CheckoutPage;
 import br.com.ezequias.automacao.pages.LoginPage;
@@ -24,8 +25,8 @@ public class CheckoutNegativoSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                "teste2022@teste.com.br",
-                "123456"
+                TestData.email(),
+                TestData.senha()
         );
 
         searchPage.buscarProduto("14.1-inch Laptop");
@@ -62,9 +63,11 @@ public class CheckoutNegativoSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                "teste2022@teste.com.br",
-                "123456"
+                TestData.email(),
+                TestData.senha()
         );
+
+        cartPage.limparCarrinho();
     }
 
     @When("acessa o carrinho sem produtos")

@@ -1,5 +1,6 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
+import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.LoginPage;
 import br.com.ezequias.automacao.pages.SearchPage;
@@ -22,8 +23,8 @@ public class CompraSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                "teste2022@teste.com.br",
-                "teste@"
+                TestData.email(),
+                TestData.senha()
         );
 
         assertTrue(

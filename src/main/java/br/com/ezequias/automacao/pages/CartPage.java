@@ -2,14 +2,17 @@ package br.com.ezequias.automacao.pages;
 
 import java.time.Duration;
 
-import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CartPage extends BasePage {
+
+    private static final Duration TEMPO_ESPERA =
+            Duration.ofSeconds(20);
 
     private final By botaoAdicionarCarrinho =
             By.cssSelector("input[value='Add to cart']");
@@ -22,9 +25,6 @@ public class CartPage extends BasePage {
 
     private final By fecharNotificacao =
             By.cssSelector("#bar-notification .close");
-
-    private final By produtoCarrinho =
-            By.cssSelector(".cart-item-row .product a");
 
     private final By produtoEsperadoCarrinho =
             By.xpath(
@@ -40,88 +40,113 @@ public class CartPage extends BasePage {
             By.cssSelector(".order-summary-content");
 
     private final By quantidadeCarrinho =
-            By.cssSelector(".cart-qty");
+            By.cssSelector("span.cart-qty");
+
+    private final By removeProduto =
+            By.cssSelector("input[name='removefromcart']");
+
+    private final By atualizarCarrinho =
+            By.cssSelector("input[name='updatecart']");
 
     public void adicionarAoCarrinho() {
-        tentarAdicionarProduto();
 
-        if (processarErroAoAdicionarProduto()) {
-            atualizarPagina();
-            tentarAdicionarProduto();
+        int quantidadeAntes = obterQuantidadeCarrinho();
 
-            if (processarErroAoAdicionarProduto()) {
-                throw new IllegalStateException(
-                        "Não foi possível adicionar o produto ao carrinho após duas tentativas."
-                );
-            }
-        }
+        clicar(botaoAdicionarCarrinho);
 
-        aguardarProdutoSerAdicionado();
-        aguardarCarrinhoAtualizar();
+        aguardarProdutoSerAdicionado(quantidadeAntes);
+
         fecharNotificacaoProdutoAdicionado();
     }
 
-    private void aguardarCarrinhoAtualizar() {
+    private void aguardarProdutoSerAdicionado(
+            int quantidadeAntes
+    ) {
+
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(15)
+                TEMPO_ESPERA
         );
 
-        wait.until(driver -> {
-            String quantidade =
-                    driver.findElement(quantidadeCarrinho).getText();
+        wait.ignoring(
+                StaleElementReferenceException.class
+        );
 
-            return !quantidade.contains("(0)");
+        wait.ignoring(
+                NoSuchElementException.class
+        );
+
+        wait.until(webDriver -> {
+            int quantidadeAtual = obterQuantidadeCarrinho();
+
+            boolean quantidadeAumentou =
+                    quantidadeAtual > quantidadeAntes;
+
+            boolean notificacaoApresentada =
+                    notificacaoEstaVisivel();
+
+            return quantidadeAumentou
+                    || notificacaoApresentada;
         });
     }
 
-    private void tentarAdicionarProduto() {
-        clicar(botaoAdicionarCarrinho);
+    private int obterQuantidadeCarrinho() {
+
+        try {
+            String textoQuantidade = driver
+                    .findElement(quantidadeCarrinho)
+                    .getAttribute("textContent");
+
+            if (textoQuantidade == null
+                    || textoQuantidade.isBlank()) {
+
+                return 0;
+            }
+
+            String somenteNumeros = textoQuantidade
+                    .replaceAll("[^0-9]", "");
+
+            if (somenteNumeros.isBlank()) {
+                return 0;
+            }
+
+            return Integer.parseInt(somenteNumeros);
+
+        } catch (NoSuchElementException
+                 | StaleElementReferenceException
+                 | NumberFormatException exception) {
+
+            return 0;
+        }
     }
 
-    private boolean processarErroAoAdicionarProduto() {
-        if (!alertaEstaPresente()) {
+    private boolean notificacaoEstaVisivel() {
+
+        try {
+            return driver
+                    .findElement(notificacaoProdutoAdicionado)
+                    .isDisplayed();
+
+        } catch (NoSuchElementException
+                 | StaleElementReferenceException exception) {
+
             return false;
         }
-
-        String mensagem = obterTextoEFecharAlerta();
-
-        System.out.println(
-                "Alerta apresentado pela aplicação: " + mensagem
-        );
-
-        return mensagem.contains(
-                "Failed to add the product to the cart"
-        );
-    }
-
-    private void aguardarProdutoSerAdicionado() {
-        new WebDriverWait(driver, Duration.ofSeconds(15))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                notificacaoProdutoAdicionado
-                        )
-                );
     }
 
     private void fecharNotificacaoProdutoAdicionado() {
-        WebDriverWait wait = new WebDriverWait(
-                driver,
-                Duration.ofSeconds(15)
-        );
 
         try {
-            wait.until(driver -> {
-                try {
-                    driver.findElement(fecharNotificacao).click();
-                    return true;
-                } catch (
-                        ElementClickInterceptedException
-                        | StaleElementReferenceException e
-                ) {
-                    return false;
-                }
-            });
+            WebDriverWait wait = new WebDriverWait(
+                    driver,
+                    Duration.ofSeconds(3)
+            );
+
+            wait.until(
+                    ExpectedConditions.elementToBeClickable(
+                            fecharNotificacao
+                    )
+            ).click();
 
             wait.until(
                     ExpectedConditions.invisibilityOfElementLocated(
@@ -129,20 +154,24 @@ public class CartPage extends BasePage {
                     )
             );
 
-        } catch (TimeoutException e) {
-            throw new IllegalStateException(
-                    "A notificação do produto não desapareceu dentro do tempo esperado.",
-                    e
+        } catch (TimeoutException
+                 | NoSuchElementException
+                 | StaleElementReferenceException exception) {
+
+            System.out.println(
+                    "Notificação não apresentada "
+                            + "ou já fechada."
             );
         }
     }
 
     public void acessarCarrinho() {
+
         clicar(linkCarrinho);
 
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(20)
+                TEMPO_ESPERA
         );
 
         wait.until(
@@ -160,11 +189,10 @@ public class CartPage extends BasePage {
 
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(20)
+                TEMPO_ESPERA
         );
 
         try {
-
             wait.until(
                     ExpectedConditions.visibilityOfElementLocated(
                             produtoEsperadoCarrinho
@@ -173,16 +201,16 @@ public class CartPage extends BasePage {
 
             return true;
 
-        } catch (TimeoutException e) {
+        } catch (TimeoutException exception) {
 
             System.out.println(
-                    "Produto não encontrado no carrinho na primeira tentativa. Atualizando a página."
+                    "Produto não encontrado na primeira "
+                            + "tentativa. Atualizando a página."
             );
 
             driver.navigate().refresh();
 
             try {
-
                 wait.until(
                         ExpectedConditions.visibilityOfElementLocated(
                                 produtoEsperadoCarrinho
@@ -194,7 +222,8 @@ public class CartPage extends BasePage {
             } catch (TimeoutException segundaTentativa) {
 
                 System.out.println(
-                        "Produto não encontrado no carrinho após atualizar a página."
+                        "Produto não encontrado no carrinho "
+                                + "após atualizar a página."
                 );
 
                 return false;
@@ -206,8 +235,38 @@ public class CartPage extends BasePage {
         return obterTexto(mensagemCarrinhoVazio);
     }
 
+    public void limparCarrinho() {
+
+        acessarCarrinho();
+
+        if (carrinhoEstaVazio()) {
+            return;
+        }
+
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(15)
+        );
+
+        wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        removeProduto
+                )
+        );
+
+        clicar(removeProduto);
+        clicar(atualizarCarrinho);
+
+        wait.until(webDriver ->
+                carrinhoEstaVazio()
+        );
+    }
+
     public boolean carrinhoEstaVazio() {
+
         return obterMensagemCarrinho()
-                .contains("Your Shopping Cart is empty!");
+                .contains(
+                        "Your Shopping Cart is empty!"
+                );
     }
 }
