@@ -4,6 +4,9 @@ import org.openqa.selenium.By;
 
 public class RegisterPage extends BasePage {
 
+    private static final String URL_BASE =
+            "https://demowebshop.tricentis.com";
+
     private final By linkRegister =
             By.className("ico-register");
 
@@ -35,7 +38,7 @@ public class RegisterPage extends BasePage {
             By.cssSelector(".field-validation-error");
 
     public void acessarTelaCadastro() {
-        driver.get("https://demowebshop.tricentis.com");
+        driver.get(URL_BASE);
         clicar(linkRegister);
     }
 
@@ -43,8 +46,8 @@ public class RegisterPage extends BasePage {
             String nome,
             String sobrenome,
             String email,
-            String senha) {
-
+            String senha
+    ) {
         escrever(campoNome, nome);
         escrever(campoSobrenome, sobrenome);
         escrever(campoEmail, email);
@@ -65,6 +68,8 @@ public class RegisterPage extends BasePage {
     }
 
     public boolean mensagemCampoObrigatorioVisivel() {
-        return elementoEstaVisivel(mensagemErroCampoObrigatorio);
+        return elementoEstaVisivel(
+                mensagemErroCampoObrigatorio
+        );
     }
 }

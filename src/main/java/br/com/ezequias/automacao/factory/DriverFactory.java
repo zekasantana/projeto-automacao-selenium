@@ -1,10 +1,10 @@
 package br.com.ezequias.automacao.factory;
 
-import java.time.Duration;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.openqa.selenium.remote.RemoteWebDriver;
+import java.time.Duration;
+import java.util.Locale;
+
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,14 +13,24 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class DriverFactory {
+public final class DriverFactory {
+
+    private static final Duration PAGE_LOAD_TIMEOUT =
+            Duration.ofSeconds(30);
+
+    private static final String BROWSER_PADRAO = "chrome";
+
+    private static final String GRID_URL_PADRAO =
+            "http://localhost:4444";
 
     /*
-     * Cada thread terá sua própria instância do WebDriver.
-     * Isso evita que cenários paralelos compartilhem o mesmo navegador.
+     * Cada thread possui sua própria instância do WebDriver.
+     * Isso evita o compartilhamento do navegador entre cenários paralelos.
      */
-    private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> DRIVER =
+            new ThreadLocal<>();
 
     private DriverFactory() {
     }
@@ -34,33 +44,232 @@ public class DriverFactory {
     }
 
     private static WebDriver criarDriver() {
-        String browser = System.getProperty("browser", "chrome")
-                .toLowerCase()
-                .trim();
-
-        boolean executandoNoCI = Boolean.parseBoolean(
-                System.getenv().getOrDefault("CI", "false")
-        );
-
-        boolean headless = Boolean.parseBoolean(
-                System.getProperty(
-                        "headless",
-                        String.valueOf(executandoNoCI)
-                )
-        );
-
+        String browser = obterBrowser();
+        boolean executandoNoCI = estaExecutandoNoCI();
+        boolean headless = obterConfiguracaoHeadless(executandoNoCI);
         boolean grid = Boolean.parseBoolean(
                 System.getProperty("grid", "false")
         );
 
         String gridUrl = System.getProperty(
                 "grid.url",
-                "http://localhost:4444"
+                GRID_URL_PADRAO
         );
 
+        exibirConfiguracoes(
+                browser,
+                headless,
+                executandoNoCI,
+                grid,
+                gridUrl
+        );
+
+        WebDriver navegador;
+
+        if (grid) {
+            navegador = criarRemoteDriver(
+                    browser,
+                    headless,
+                    gridUrl
+            );
+        } else {
+            navegador = criarDriverLocal(browser, headless);
+        }
+
+        configurarNavegador(navegador, headless);
+
+        return navegador;
+    }
+
+    private static String obterBrowser() {
+        return System.getProperty("browser", BROWSER_PADRAO)
+                .toLowerCase(Locale.ROOT)
+                .trim();
+    }
+
+    private static boolean estaExecutandoNoCI() {
+        return Boolean.parseBoolean(
+                System.getenv().getOrDefault("CI", "false")
+        );
+    }
+
+    private static boolean obterConfiguracaoHeadless(
+            boolean executandoNoCI
+    ) {
+        return Boolean.parseBoolean(
+                System.getProperty(
+                        "headless",
+                        String.valueOf(executandoNoCI)
+                )
+        );
+    }
+
+    private static WebDriver criarDriverLocal(
+            String browser,
+            boolean headless
+    ) {
+        return switch (browser) {
+            case "chrome" -> criarChromeDriver(headless);
+            case "edge" -> criarEdgeDriver(headless);
+            case "firefox" -> criarFirefoxDriver(headless);
+            default -> throw navegadorNaoSuportado(browser, false);
+        };
+    }
+
+    private static void configurarNavegador(
+            WebDriver navegador,
+            boolean headless
+    ) {
+        navegador.manage()
+                .timeouts()
+                .implicitlyWait(Duration.ZERO);
+
+        navegador.manage()
+                .timeouts()
+                .pageLoadTimeout(PAGE_LOAD_TIMEOUT);
+
+        if (!headless) {
+            navegador.manage().window().maximize();
+        }
+    }
+
+    private static ChromeOptions criarChromeOptions(
+            boolean headless
+    ) {
+        ChromeOptions options = new ChromeOptions();
+
+        if (headless) {
+            options.addArguments("--headless=new");
+        }
+
+        options.addArguments(
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-gpu",
+                "--window-size=1920,1080"
+        );
+
+        return options;
+    }
+
+    private static WebDriver criarChromeDriver(boolean headless) {
+        return new ChromeDriver(criarChromeOptions(headless));
+    }
+
+    private static EdgeOptions criarEdgeOptions(
+            boolean headless
+    ) {
+        EdgeOptions options = new EdgeOptions();
+
+        /*
+         * Mantido para reduzir problemas de carregamento
+         * do Edge em execução no CI.
+         */
+        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+
+        if (headless) {
+            options.addArguments("--headless=new");
+        }
+
+        options.addArguments(
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-gpu",
+                "--window-size=1920,1080"
+        );
+
+        return options;
+    }
+
+    private static WebDriver criarEdgeDriver(boolean headless) {
+        return new EdgeDriver(criarEdgeOptions(headless));
+    }
+
+    private static FirefoxOptions criarFirefoxOptions(
+            boolean headless
+    ) {
+        FirefoxOptions options = new FirefoxOptions();
+
+        if (headless) {
+            options.addArguments("-headless");
+        }
+
+        options.addArguments(
+                "--width=1920",
+                "--height=1080"
+        );
+
+        return options;
+    }
+
+    private static WebDriver criarFirefoxDriver(boolean headless) {
+        return new FirefoxDriver(criarFirefoxOptions(headless));
+    }
+
+    private static WebDriver criarRemoteDriver(
+            String browser,
+            boolean headless,
+            String gridUrl
+    ) {
+        try {
+            URL remoteUrl = new URL(gridUrl);
+
+            return switch (browser) {
+                case "chrome" -> new RemoteWebDriver(
+                        remoteUrl,
+                        criarChromeOptions(headless)
+                );
+
+                case "edge" -> new RemoteWebDriver(
+                        remoteUrl,
+                        criarEdgeOptions(headless)
+                );
+
+                case "firefox" -> new RemoteWebDriver(
+                        remoteUrl,
+                        criarFirefoxOptions(headless)
+                );
+
+                default -> throw navegadorNaoSuportado(
+                        browser,
+                        true
+                );
+            };
+
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(
+                    "URL do Selenium Grid inválida: " + gridUrl,
+                    e
+            );
+        }
+    }
+
+    private static IllegalArgumentException navegadorNaoSuportado(
+            String browser,
+            boolean grid
+    ) {
+        String contexto = grid
+                ? " no Selenium Grid"
+                : "";
+
+        return new IllegalArgumentException(
+                "Navegador não suportado"
+                        + contexto
+                        + ": "
+                        + browser
+                        + ". Utilize chrome, edge ou firefox."
+        );
+    }
+
+    private static void exibirConfiguracoes(
+            String browser,
+            boolean headless,
+            boolean executandoNoCI,
+            boolean grid,
+            String gridUrl
+    ) {
         System.out.println(
                 "Execução via Selenium Grid: " + grid
-
         );
 
         if (grid) {
@@ -81,186 +290,23 @@ public class DriverFactory {
         System.out.println(
                 "Ambiente CI: " + executandoNoCI
         );
-
-        WebDriver navegador;
-
-        if (grid) {
-            navegador = criarRemoteDriver(
-                    browser,
-                    headless,
-                    gridUrl
-            );
-        } else {
-            switch (browser) {
-                case "chrome":
-                    navegador = criarChromeDriver(headless);
-                    break;
-
-                case "edge":
-                    navegador = criarEdgeDriver(headless);
-                    break;
-
-                case "firefox":
-                    navegador = criarFirefoxDriver(headless);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException(
-                            "Navegador não suportado: " + browser
-                                    + ". Utilize chrome, edge ou firefox."
-                    );
-            }
-        }
-
-        navegador.manage()
-                .timeouts()
-                .implicitlyWait(Duration.ofSeconds(0));
-
-        navegador.manage()
-                .timeouts()
-                .pageLoadTimeout(Duration.ofSeconds(30));
-
-        if (!headless) {
-            navegador.manage().window().maximize();
-        }
-
-        return navegador;
-    }
-
-    private static ChromeOptions criarChromeOptions(boolean headless) {
-        ChromeOptions options = new ChromeOptions();
-
-        if (headless) {
-            options.addArguments("--headless=new");
-        }
-
-        options.addArguments(
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-                "--disable-gpu",
-                "--window-size=1920,1080"
-        );
-
-        return options;
-    }
-
-    private static WebDriver criarChromeDriver(boolean headless) {
-        return new ChromeDriver(
-                criarChromeOptions(headless)
-        );
-    }
-
-    private static EdgeOptions criarEdgeOptions(boolean headless) {
-        EdgeOptions options = new EdgeOptions();
-
-        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
-
-        if (headless) {
-            options.addArguments("--headless=new");
-        }
-
-        options.addArguments(
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-                "--disable-gpu",
-                "--window-size=1920,1080"
-        );
-
-        return options;
-    }
-
-    private static WebDriver criarEdgeDriver(boolean headless) {
-        return new EdgeDriver(
-                criarEdgeOptions(headless)
-        );
-    }
-
-    private static FirefoxOptions criarFirefoxOptions(boolean headless) {
-        FirefoxOptions options = new FirefoxOptions();
-
-        if (headless) {
-            options.addArguments("-headless");
-        }
-
-        options.addArguments("--width=1920");
-        options.addArguments("--height=1080");
-
-        return options;
-    }
-
-    private static WebDriver criarFirefoxDriver(boolean headless) {
-        return new FirefoxDriver(
-                criarFirefoxOptions(headless)
-        );
-    }
-
-    private static WebDriver criarRemoteDriver(
-            String browser,
-            boolean headless,
-            String gridUrl
-    ) {
-
-        try {
-            URL remoteUrl = new URL(gridUrl);
-
-            switch (browser) {
-                case "chrome":
-                    ChromeOptions chromeOptions =
-                            criarChromeOptions(headless);
-
-                    return new RemoteWebDriver(
-                            remoteUrl,
-                            chromeOptions
-                    );
-
-                case "edge":
-                    EdgeOptions edgeOptions =
-                            criarEdgeOptions(headless);
-
-                    return new RemoteWebDriver(
-                            remoteUrl,
-                            edgeOptions
-                    );
-
-                case "firefox":
-                    FirefoxOptions firefoxOptions =
-                            criarFirefoxOptions(headless);
-
-                    return new RemoteWebDriver(
-                            remoteUrl,
-                            firefoxOptions
-                    );
-
-                default:
-                    throw new IllegalArgumentException(
-                            "Navegador não suportado no Grid: "
-                                    + browser
-                    );
-            }
-
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException(
-                    "URL do Selenium Grid inválida: " + gridUrl,
-                    e
-            );
-        }
     }
 
     public static void quitDriver() {
         WebDriver driver = DRIVER.get();
 
-        if (driver != null) {
-            try {
-                driver.quit();
-            } finally {
-                /*
-                 * Remove a referência da thread para evitar vazamento
-                 * de memória e reutilização indevida do navegador.
-                 */
-                DRIVER.remove();
+        if (driver == null) {
+            return;
+        }
 
-
-            }
+        try {
+            driver.quit();
+        } finally {
+            /*
+             * Remove a referência da thread para evitar vazamento
+             * de memória e reutilização indevida do navegador.
+             */
+            DRIVER.remove();
         }
     }
 }

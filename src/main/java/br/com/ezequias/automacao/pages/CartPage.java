@@ -23,9 +23,6 @@ public class CartPage extends BasePage {
     private final By fecharNotificacao =
             By.cssSelector("#bar-notification .close");
 
-    private final By produtoCarrinho =
-            By.cssSelector(".cart-item-row .product a");
-
     private final By produtoEsperadoCarrinho =
             By.xpath(
                     "//tr[contains(@class,'cart-item-row')]"

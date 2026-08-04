@@ -4,15 +4,15 @@ import br.com.ezequias.automacao.factory.DriverFactory;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import io.qameta.allure.Allure;
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-
-import java.io.File;
-import java.io.IOException;
+import org.openqa.selenium.WebDriver;
 
 public class Hooks {
+
+    private static final String TIPO_IMAGEM = "image/png";
+    private static final String NOME_EVIDENCIA =
+            "Evidência do cenário com falha";
 
     @Before
     public void setUp() {
@@ -23,29 +23,28 @@ public class Hooks {
     public void after(Scenario scenario) {
         try {
             if (scenario.isFailed()) {
-                File screenshot =
-                        ((TakesScreenshot) DriverFactory.getDriver())
-                                .getScreenshotAs(OutputType.FILE);
-
-                FileUtils.copyFile(
-                        screenshot,
-                        new File(
-                                "evidencias/"
-                                        + scenario.getName()
-                                        .replaceAll("[^a-zA-Z0-9-]", "")
-                                        + ".png"
-                        )
-                );
+                anexarScreenshot(scenario);
             }
-        } catch (IOException e) {
-            System.err.println(
-                    "Não foi possível salvar a evidência do cenário: "
-                            + scenario.getName()
-            );
-            e.printStackTrace();
         } finally {
             DriverFactory.quitDriver();
-
         }
+    }
+
+    private void anexarScreenshot(Scenario scenario) {
+        WebDriver driver = DriverFactory.getDriver();
+
+        if (!(driver instanceof TakesScreenshot screenshotDriver)) {
+            return;
+        }
+
+        byte[] screenshot = screenshotDriver.getScreenshotAs(
+                OutputType.BYTES
+        );
+
+        scenario.attach(
+                screenshot,
+                TIPO_IMAGEM,
+                NOME_EVIDENCIA
+        );
     }
 }
