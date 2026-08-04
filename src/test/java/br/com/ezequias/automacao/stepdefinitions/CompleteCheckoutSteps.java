@@ -31,6 +31,8 @@ public class CompleteCheckoutSteps {
                 TestData.senha()
         );
 
+        loginPage.aguardarLoginRealizado();
+
         assertTrue(
                 loginPage.loginRealizadoComSucesso(),
                 "O login não foi realizado com sucesso."
