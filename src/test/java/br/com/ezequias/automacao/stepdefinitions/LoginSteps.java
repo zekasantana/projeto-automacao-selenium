@@ -1,6 +1,5 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
-import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.HomePage;
 import br.com.ezequias.automacao.pages.LoginPage;
 import io.cucumber.java.en.And;
@@ -8,6 +7,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class LoginSteps {
@@ -28,8 +28,8 @@ public class LoginSteps {
     @When("informa um usuário e senha válidos")
     public void informaUmUsuarioESenhaValidos() {
         loginPage.realizarLogin(
-                TestData.email(),
-                TestData.senha()
+                "teste2022@teste.com.br",
+                "teste@"
         );
     }
 
@@ -51,10 +51,13 @@ public class LoginSteps {
 
     @Then("devo visualizar uma mensagem de erro")
     public void devoVisualizarUmaMensagemDeErro() {
-        String mensagemErro = loginPage.obterMensagemErro();
+        String mensagemErro =
+                loginPage.obterMensagemErro();
 
         assertTrue(
-                mensagemErro.contains("Login was unsuccessful"),
+                mensagemErro.contains(
+                        "Login was unsuccessful"
+                ),
                 "A mensagem de erro de login não foi exibida."
         );
     }
@@ -66,8 +69,9 @@ public class LoginSteps {
 
     @Then("deve visualizar a pagina de login")
     public void deveVisualizarAPaginaDeLogin() {
-        Assertions.assertTrue(loginPage.estaNaPaginaLogin());
-
+        Assertions.assertTrue(
+                loginPage.estaNaPaginaLogin()
+        );
     }
 
     @When("não preencho email e senha")
@@ -82,13 +86,12 @@ public class LoginSteps {
 
     @Then("devo visualizar a mensagem de erro de login")
     public void devoVisualizarAMensagemDeErroDeLogin() {
-
         assertTrue(
                 loginPage.obterMensagemErro()
-                        .contains("Login was unsuccessful"),
+                        .contains(
+                                "Login was unsuccessful"
+                        ),
                 "Mensagem de erro não encontrada."
         );
     }
-
-
 }

@@ -1,6 +1,5 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
-import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.CheckoutPage;
 import br.com.ezequias.automacao.pages.LoginPage;
@@ -25,8 +24,8 @@ public class CheckoutNegativoSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                TestData.email(),
-                TestData.senha()
+                "teste2022@teste.com.br",
+                "123456"
         );
 
         searchPage.buscarProduto("14.1-inch Laptop");
@@ -38,7 +37,6 @@ public class CheckoutNegativoSteps {
 
     @When("tento realizar o checkout sem aceitar os termos de serviço")
     public void tentoRealizarOCheckoutSemAceitarOsTermosDeServico() {
-
         checkoutPage.clicarCheckout();
     }
 
@@ -63,16 +61,13 @@ public class CheckoutNegativoSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                TestData.email(),
-                TestData.senha()
+                "teste2022@teste.com.br",
+                "123456"
         );
-
-        cartPage.limparCarrinho();
     }
 
     @When("acessa o carrinho sem produtos")
     public void acessaOCarrinhoSemProdutos() {
-
         cartPage.acessarCarrinho();
     }
 

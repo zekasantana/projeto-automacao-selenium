@@ -3,18 +3,10 @@ package br.com.ezequias.automacao.pages;
 import java.time.Duration;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage {
-
-    private static final Duration TIMEOUT_LOGIN =
-            Duration.ofSeconds(30);
-
-    private static final Duration TIMEOUT_LOGOUT =
-            Duration.ofSeconds(20);
 
     private final By email =
             By.id("Email");
@@ -31,7 +23,7 @@ public class LoginPage extends BasePage {
     private final By linkLogin =
             By.className("ico-login");
 
-    private final By mensagemErroLogin =
+    private final By mensagemErro =
             By.cssSelector(".validation-summary-errors");
 
     public void acessarLogin() {
@@ -61,113 +53,34 @@ public class LoginPage extends BasePage {
         clicarEntrar();
     }
 
-    public boolean loginRealizadoComSucesso() {
-
-        WebDriverWait wait =
-                new WebDriverWait(driver, TIMEOUT_LOGIN);
-
-        wait.ignoring(
-                StaleElementReferenceException.class
+    public void aguardarLoginRealizado() {
+        WebDriverWait wait = new WebDriverWait(
+                driver,
+                Duration.ofSeconds(20)
         );
 
-        try {
-            return wait.until(webDriver -> {
-
-                boolean saiuDaPaginaLogin =
-                        !webDriver.getCurrentUrl()
-                                .contains("/login");
-
-                boolean logoutVisivel =
-                        !webDriver.findElements(linkLogout)
-                                .isEmpty()
-                                && webDriver.findElement(linkLogout)
-                                .isDisplayed();
-
-                return saiuDaPaginaLogin && logoutVisivel;
-            });
-
-        } catch (TimeoutException exception) {
-            registrarFalhaLogin();
-            return false;
-        }
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        linkLogout
+                )
+        );
     }
 
-    public void aguardarLoginRealizado() {
-
-        if (!loginRealizadoComSucesso()) {
-            throw new TimeoutException(
-                    "O login não foi realizado com sucesso. "
-                            + "URL atual: "
-                            + driver.getCurrentUrl()
-            );
-        }
+    public boolean loginRealizadoComSucesso() {
+        return elementoEstaVisivel(linkLogout);
     }
 
     public String obterMensagemErro() {
-
-        WebDriverWait wait =
-                new WebDriverWait(driver, TIMEOUT_LOGIN);
-
-        return wait.until(
-                ExpectedConditions.visibilityOfElementLocated(
-                        mensagemErroLogin
-                )
-        ).getText();
+        return driver
+                .findElement(mensagemErro)
+                .getText();
     }
 
     public void realizarLogout() {
-
-        WebDriverWait wait =
-                new WebDriverWait(driver, TIMEOUT_LOGOUT);
-
-        wait.ignoring(
-                StaleElementReferenceException.class
-        );
-
-        wait.until(
-                ExpectedConditions.elementToBeClickable(
-                        linkLogout
-                )
-        ).click();
-
-        wait.until(
-                ExpectedConditions.or(
-                        ExpectedConditions.urlContains("/login"),
-                        ExpectedConditions.visibilityOfElementLocated(
-                                linkLogin
-                        )
-                )
-        );
+        clicar(linkLogout);
     }
 
     public boolean estaNaPaginaLogin() {
-
-        boolean urlLogin =
-                driver.getCurrentUrl().contains("/login");
-
-        boolean linkLoginVisivel =
-                elementoEstaVisivel(linkLogin);
-
-        return urlLogin || linkLoginVisivel;
-    }
-
-    private void registrarFalhaLogin() {
-
-        System.out.println(
-                "URL após tentativa de login: "
-                        + driver.getCurrentUrl()
-        );
-
-        if (!driver.findElements(mensagemErroLogin).isEmpty()) {
-
-            String mensagem =
-                    driver.findElement(mensagemErroLogin)
-                            .getText();
-
-            System.out.println(
-                    "Mensagem apresentada pelo site: "
-                            + mensagem
-            );
-        }
+        return elementoEstaVisivel(linkLogin);
     }
 }

@@ -1,6 +1,5 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
-import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.LoginPage;
 import br.com.ezequias.automacao.pages.SearchPage;
@@ -23,8 +22,8 @@ public class CompraSteps {
         loginPage.acessarLogin();
 
         loginPage.realizarLogin(
-                TestData.email(),
-                TestData.senha()
+                "teste2022@teste.com.br",
+                "teste@"
         );
 
         assertTrue(
@@ -58,7 +57,6 @@ public class CompraSteps {
 
     @When("busca pelo produto inexistente {string}")
     public void buscaPeloProdutoInexistente(String produto) {
-
         searchPage.buscarProduto(produto);
     }
 
@@ -76,6 +74,4 @@ public class CompraSteps {
                 "A mensagem apresenta está diferente da esperada."
         );
     }
-
-
 }

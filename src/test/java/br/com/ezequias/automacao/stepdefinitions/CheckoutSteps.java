@@ -2,7 +2,6 @@ package br.com.ezequias.automacao.stepdefinitions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.CheckoutPage;
 import br.com.ezequias.automacao.pages.HomePage;
@@ -27,8 +26,8 @@ public class CheckoutSteps {
 
         loginPage.acessarLogin();
         loginPage.realizarLogin(
-                TestData.email(),
-                TestData.senha()
+                "teste2022@teste.com.br",
+                "teste@"
         );
 
         searchPage.buscarProduto("14.1-inch Laptop");
