@@ -50,6 +50,29 @@ public class BasePage {
         campo.sendKeys(texto);
     }
 
+
+    protected void escreverComRetry(
+            By elemento,
+            String texto
+    ) {
+        criarEspera(TIMEOUT_PADRAO)
+                .ignoring(StaleElementReferenceException.class)
+                .until(driver -> {
+                    WebElement campo =
+                            driver.findElement(elemento);
+
+                    if (!campo.isDisplayed()
+                            || !campo.isEnabled()) {
+                        return false;
+                    }
+
+                    campo.clear();
+                    campo.sendKeys(texto);
+
+                    return true;
+                });
+    }
+
     protected String obterTexto(By elemento) {
         return criarEspera(TIMEOUT_PADRAO)
                 .until(

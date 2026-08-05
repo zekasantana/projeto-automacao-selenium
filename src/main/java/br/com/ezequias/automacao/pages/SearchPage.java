@@ -20,7 +20,7 @@ public class SearchPage extends BasePage {
             By.cssSelector(".search-results .result");
 
     public void buscarProduto(String produto) {
-        escrever(campoBusca, produto);
+        escreverComRetry(campoBusca, produto);
         clicar(botaoBuscar);
     }
 
