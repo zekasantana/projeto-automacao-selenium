@@ -27,15 +27,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - browser: chrome
-            user_secret: QA_USER_CHROME
-
-          - browser: firefox
-            user_secret: QA_USER_FIREFOX
-
-          - browser: edge
-            user_secret: QA_USER_EDGE
+        browser:
+          - chrome
+          - firefox
+          - edge
 
     steps:
       - name: Baixar código do repositório
@@ -53,38 +48,12 @@ jobs:
           java -version
           mvn -version
 
-      - name: Validar credenciais de teste
-        env:
-          TEST_USER_EMAIL: ${{ secrets[matrix.user_secret] }}
-          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
-        shell: bash
-        run: |
-          if [ -z "$TEST_USER_EMAIL" ]; then
-            echo "ERRO: o secret de usuário não foi carregado."
-            echo "Secret esperado: ${{ matrix.user_secret }}"
-            exit 1
-          fi
-
-          if [ -z "$TEST_USER_PASSWORD" ]; then
-            echo "ERRO: QA_PASSWORD não foi carregado."
-            exit 1
-          fi
-
-          echo "Credencial de usuário carregada."
-          echo "Tamanho do usuário: ${#TEST_USER_EMAIL}"
-          echo "Tamanho da senha: ${#TEST_USER_PASSWORD}"
-
       - name: Executar Smoke no ${{ matrix.browser }}
-        env:
-          TEST_USER_EMAIL: ${{ secrets[matrix.user_secret] }}
-          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn clean test
           -Dtest=RunCucumberTest
           -Dbrowser=${{ matrix.browser }}
           -Dheadless=true
-          -Dtest.user.email="$TEST_USER_EMAIL"
-          -Dtest.user.password="$TEST_USER_PASSWORD"
           -Dcucumber.filter.tags="@smoke"
 
       - name: Publicar resultados do Allure
@@ -127,37 +96,12 @@ jobs:
           mvn -version
           google-chrome --version
 
-      - name: Validar credenciais Regression
-        env:
-          TEST_USER_EMAIL: ${{ secrets.QA_USER_REGRESSION }}
-          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
-        shell: bash
-        run: |
-          if [ -z "$TEST_USER_EMAIL" ]; then
-            echo "ERRO: QA_USER_REGRESSION não foi carregado."
-            exit 1
-          fi
-
-          if [ -z "$TEST_USER_PASSWORD" ]; then
-            echo "ERRO: QA_PASSWORD não foi carregado."
-            exit 1
-          fi
-
-          echo "Credenciais Regression carregadas."
-          echo "Tamanho do usuário: ${#TEST_USER_EMAIL}"
-          echo "Tamanho da senha: ${#TEST_USER_PASSWORD}"
-
       - name: Executar Regression no Chrome
-        env:
-          TEST_USER_EMAIL: ${{ secrets.QA_USER_REGRESSION }}
-          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn clean test
           -Dtest=RunCucumberTest
           -Dbrowser=chrome
           -Dheadless=true
-          -Dtest.user.email="$TEST_USER_EMAIL"
-          -Dtest.user.password="$TEST_USER_PASSWORD"
           -Dcucumber.filter.tags="@regression"
 
       - name: Publicar resultados do Allure
@@ -240,36 +184,11 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Validar credenciais Sonar
-        env:
-            TEST_USER_EMAIL: ${{ secrets.QA_USER_SONAR }}
-            TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
-        shell: bash
-        run: |
-            if [ -z "$TEST_USER_EMAIL" ]; then
-              echo "ERRO: QA_USER_SONAR não foi carregado."
-              exit 1
-            fi
-            
-            if [ -z "$TEST_USER_PASSWORD" ]; then
-              echo "ERRO: QA_PASSWORD não foi carregado."
-              exit 1
-            fi
-            
-            echo "Credenciais Sonar carregadas."
-            echo "Tamanho do usuário: ${#TEST_USER_EMAIL}"
-            echo "Tamanho da senha: ${#TEST_USER_PASSWORD}"
-
       - name: Executar testes e gerar cobertura
-        env:
-          TEST_USER_EMAIL: ${{ secrets.QA_USER_SONAR }}
-          TEST_USER_PASSWORD: ${{ secrets.QA_PASSWORD }}
         run: >
           mvn -B clean test
           -Dheadless=true
           -Dbrowser=chrome
-          -Dtest.user.email="$TEST_USER_EMAIL"
-          -Dtest.user.password="$TEST_USER_PASSWORD"
 
       - name: Executar análise no SonarQube Cloud
         env:
