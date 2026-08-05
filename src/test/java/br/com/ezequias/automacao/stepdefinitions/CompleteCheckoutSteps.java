@@ -1,5 +1,6 @@
 package br.com.ezequias.automacao.stepdefinitions;
 
+import br.com.ezequias.automacao.utils.TestData;
 import br.com.ezequias.automacao.pages.CartPage;
 import br.com.ezequias.automacao.pages.CheckoutPage;
 import br.com.ezequias.automacao.pages.CompleteCheckoutPage;
@@ -26,9 +27,11 @@ public class CompleteCheckoutSteps {
 
         loginPage.acessarLogin();
         loginPage.realizarLogin(
-                "teste2022@teste.com.br",
-                "teste@"
+                TestData.email(),
+                TestData.senha()
         );
+
+        loginPage.aguardarLoginRealizado();
 
         assertTrue(
                 loginPage.loginRealizadoComSucesso(),

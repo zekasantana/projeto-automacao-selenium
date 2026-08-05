@@ -37,7 +37,6 @@ public class CheckoutNegativoSteps {
 
     @When("tento realizar o checkout sem aceitar os termos de serviço")
     public void tentoRealizarOCheckoutSemAceitarOsTermosDeServico() {
-
         checkoutPage.clicarCheckout();
     }
 
@@ -69,7 +68,6 @@ public class CheckoutNegativoSteps {
 
     @When("acessa o carrinho sem produtos")
     public void acessaOCarrinhoSemProdutos() {
-
         cartPage.acessarCarrinho();
     }
 

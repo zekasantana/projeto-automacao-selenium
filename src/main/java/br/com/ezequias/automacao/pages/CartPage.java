@@ -23,8 +23,12 @@ public class CartPage extends BasePage {
     private final By fecharNotificacao =
             By.cssSelector("#bar-notification .close");
 
-    private final By produtoCarrinho =
-            By.cssSelector(".cart-item-row .product a");
+    private final By produtoEsperadoCarrinho =
+            By.xpath(
+                    "//tr[contains(@class,'cart-item-row')]"
+                            + "//td[contains(@class,'product')]"
+                            + "//a[normalize-space()='14.1-inch Laptop']"
+            );
 
     private final By paginaCarrinho =
             By.cssSelector(".shopping-cart-page");
@@ -44,7 +48,8 @@ public class CartPage extends BasePage {
 
             if (processarErroAoAdicionarProduto()) {
                 throw new IllegalStateException(
-                        "Não foi possível adicionar o produto ao carrinho após duas tentativas."
+                        "Não foi possível adicionar o produto "
+                                + "ao carrinho após duas tentativas."
                 );
             }
         }
@@ -60,9 +65,10 @@ public class CartPage extends BasePage {
                 Duration.ofSeconds(15)
         );
 
-        wait.until(driver -> {
-            String quantidade =
-                    driver.findElement(quantidadeCarrinho).getText();
+        wait.until(webDriver -> {
+            String quantidade = webDriver
+                    .findElement(quantidadeCarrinho)
+                    .getText();
 
             return !quantidade.contains("(0)");
         });
@@ -80,7 +86,8 @@ public class CartPage extends BasePage {
         String mensagem = obterTextoEFecharAlerta();
 
         System.out.println(
-                "Alerta apresentado pela aplicação: " + mensagem
+                "Alerta apresentado pela aplicação: "
+                        + mensagem
         );
 
         return mensagem.contains(
@@ -89,12 +96,14 @@ public class CartPage extends BasePage {
     }
 
     private void aguardarProdutoSerAdicionado() {
-        new WebDriverWait(driver, Duration.ofSeconds(15))
-                .until(
-                        ExpectedConditions.visibilityOfElementLocated(
-                                notificacaoProdutoAdicionado
-                        )
-                );
+        new WebDriverWait(
+                driver,
+                Duration.ofSeconds(15)
+        ).until(
+                ExpectedConditions.visibilityOfElementLocated(
+                        notificacaoProdutoAdicionado
+                )
+        );
     }
 
     private void fecharNotificacaoProdutoAdicionado() {
@@ -104,13 +113,17 @@ public class CartPage extends BasePage {
         );
 
         try {
-            wait.until(driver -> {
+            wait.until(webDriver -> {
                 try {
-                    driver.findElement(fecharNotificacao).click();
+                    webDriver
+                            .findElement(fecharNotificacao)
+                            .click();
+
                     return true;
+
                 } catch (
                         ElementClickInterceptedException
-                        | StaleElementReferenceException e
+                        | StaleElementReferenceException exception
                 ) {
                     return false;
                 }
@@ -122,10 +135,11 @@ public class CartPage extends BasePage {
                     )
             );
 
-        } catch (TimeoutException e) {
+        } catch (TimeoutException exception) {
             throw new IllegalStateException(
-                    "A notificação do produto não desapareceu dentro do tempo esperado.",
-                    e
+                    "A notificação do produto não desapareceu "
+                            + "dentro do tempo esperado.",
+                    exception
             );
         }
     }
@@ -135,7 +149,7 @@ public class CartPage extends BasePage {
 
         WebDriverWait wait = new WebDriverWait(
                 driver,
-                Duration.ofSeconds(15)
+                Duration.ofSeconds(20)
         );
 
         wait.until(
@@ -156,28 +170,40 @@ public class CartPage extends BasePage {
         );
 
         try {
-            return wait.until(driver -> {
-                try {
-                    return driver.findElements(produtoCarrinho)
-                            .stream()
-                            .anyMatch(produto ->
-                                    produto.isDisplayed()
-                                            && produto.getText()
-                                            .trim()
-                                            .equals("14.1-inch Laptop")
-                            );
-
-                } catch (StaleElementReferenceException e) {
-                    return false;
-                }
-            });
-
-        } catch (TimeoutException e) {
-            System.out.println(
-                    "Produto não encontrado no carrinho dentro do tempo esperado."
+            wait.until(
+                    ExpectedConditions.visibilityOfElementLocated(
+                            produtoEsperadoCarrinho
+                    )
             );
 
-            return false;
+            return true;
+
+        } catch (TimeoutException exception) {
+            System.out.println(
+                    "Produto não encontrado no carrinho "
+                            + "na primeira tentativa. "
+                            + "Atualizando a página."
+            );
+
+            driver.navigate().refresh();
+
+            try {
+                wait.until(
+                        ExpectedConditions.visibilityOfElementLocated(
+                                produtoEsperadoCarrinho
+                        )
+                );
+
+                return true;
+
+            } catch (TimeoutException segundaTentativa) {
+                System.out.println(
+                        "Produto não encontrado no carrinho "
+                                + "após atualizar a página."
+                );
+
+                return false;
+            }
         }
     }
 
@@ -187,6 +213,8 @@ public class CartPage extends BasePage {
 
     public boolean carrinhoEstaVazio() {
         return obterMensagemCarrinho()
-                .contains("Your Shopping Cart is empty!");
+                .contains(
+                        "Your Shopping Cart is empty!"
+                );
     }
 }

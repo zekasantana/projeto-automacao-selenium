@@ -57,7 +57,6 @@ public class CompraSteps {
 
     @When("busca pelo produto inexistente {string}")
     public void buscaPeloProdutoInexistente(String produto) {
-
         searchPage.buscarProduto(produto);
     }
 
@@ -75,6 +74,4 @@ public class CompraSteps {
                 "A mensagem apresenta está diferente da esperada."
         );
     }
-
-
 }
