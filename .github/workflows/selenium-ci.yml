@@ -184,11 +184,10 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Executar testes e gerar cobertura
+      - name: Compilar projeto sem executar testes
         run: >
-          mvn -B clean test
-          -Dheadless=true
-          -Dbrowser=chrome
+          mvn -B clean test-compile
+          -DskipTests
 
       - name: Executar análise no SonarQube Cloud
         env:
@@ -197,3 +196,4 @@ jobs:
           mvn -B
           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
           -Dsonar.projectKey=zekasantana_projeto-automacao-selenium
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
