@@ -40,7 +40,7 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 |-----------------------|------------------|
 | Java                  | 17               |
 | Selenium WebDriver    | 4.x              |
-| Cucumber              | 7.x              |
+| Cucumber BDD          | 7.x              |
 | JUnit Platform        | 1.x              |
 | Maven                 | 3.9+             |
 | Docker                | Latest           |
@@ -50,7 +50,9 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 | Edge                  | Latest           |
 | RestAssured           | 5.x              |
 | JSON Schema Validator | Contract Testing |
-
+| SonarQube Cloud       | Latest           |
+| JaCoCo                | Latest           |
+| Allure Report         | Latest           |
 ---
 
 # 🏗 Arquitetura do Framework
@@ -76,6 +78,20 @@ Funcionalidades:
 
 ---
 
+## 🚀 Funcionalidades
+
+- Automação Web com Selenium WebDriver
+- Testes BDD com Cucumber
+- Testes unitários com JUnit 5
+- Testes de API com RestAssured
+- Execução Cross-Browser (Chrome, Firefox e Edge)
+- Execução local e remota com Selenium Grid
+- Integração Contínua com GitHub Actions
+- Análise Estática com SonarQube Cloud
+- Cobertura de código com JaCoCo
+- Relatórios Allure
+- Qualidade de código com Checkstyle, PMD e SpotBugs
+
 ### Pages
 
 Responsáveis por encapsular elementos e ações das páginas da aplicação.
@@ -88,6 +104,8 @@ Páginas implementadas:
 - CartPage
 - CheckoutPage
 - CompleteCheckoutPage
+- BasePage
+- HomePage
 
 ---
 
@@ -101,6 +119,7 @@ Classes:
 - CadastroSteps
 - CompraSteps
 - CheckoutSteps
+- CheckoutNegativoSteps
 - CompleteCheckoutSteps
 
 ---
@@ -299,6 +318,7 @@ O framework suporta execução nos navegadores:
 - Checkstyle
 - PMD
 - SpotBugs
+- SonarQube Cloud
 
 ## Sprint 2.9 – Testes de API com RestAssured
 
@@ -359,6 +379,32 @@ Atualmente, a suíte Smoke contém 5 cenários:
 - Cadastro de usuário com sucesso
 - Adição de produto ao carrinho
 - Acesso ao checkout
+
+
+## ⚙️ Pipeline CI/CD
+
+A pipeline do GitHub Actions está organizada nos seguintes jobs:
+
+- Smoke - Chrome
+- Smoke - Firefox
+- Smoke - Edge
+- Regression - Chrome
+- API - RestAssured
+- SonarQube Cloud
+
+Todos os jobs são executados automaticamente em Push e Pull Request para a branch `main`.
+
+## 📊 Qualidade de Código
+
+O projeto possui integração com o SonarQube Cloud para análise estática de código.
+
+Também utiliza:
+
+- JaCoCo para cobertura de testes
+- Checkstyle para padronização do código
+- PMD para análise de boas práticas
+- SpotBugs para detecção de possíveis defeitos
+
 
 #### Implementações
 
