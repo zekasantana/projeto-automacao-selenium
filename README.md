@@ -243,6 +243,19 @@ O projeto também possui testes automatizados de API utilizando RestAssured, JUn
 
 A configuração comum das requisições foi centralizada na classe `ApiBase`, utilizando `RequestSpecification` para reaproveitamento da URL base, Content-Type e configurações de log.
 
+## Testes Unitários
+
+O projeto também possui testes unitários para validar componentes do framework.
+
+### Cobertura atual
+
+- ✅ TestData
+
+### Executar apenas os testes unitários
+
+```bash
+mvn test -Dtest=TestDataTest
+
 ### Endpoints automatizados
 
 | Método | Endpoint | Validação                                   |
