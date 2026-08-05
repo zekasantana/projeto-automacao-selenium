@@ -1,6 +1,10 @@
 package br.com.ezequias.automacao.pages;
 
 import org.openqa.selenium.By;
+import java.time.Duration;
+import br.com.ezequias.automacao.factory.DriverFactory;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CheckoutPage extends BasePage {
 
@@ -25,8 +29,22 @@ public class CheckoutPage extends BasePage {
     }
 
     public boolean estaNaPaginaCheckout() {
-        return elementoEstaVisivel(tituloCheckout)
-                && obterTexto(tituloCheckout).contains("Checkout");
+        try {
+            WebDriverWait wait = new WebDriverWait(
+                    DriverFactory.getDriver(),
+                    Duration.ofSeconds(30)
+            );
+
+            return wait.until(driver ->
+                    driver.getCurrentUrl().contains("/onepagecheckout")
+                            && elementoEstaVisivel(tituloCheckout)
+                            && obterTexto(tituloCheckout)
+                            .trim()
+                            .equalsIgnoreCase("Checkout")
+            );
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public boolean mensagemTermosEstaVisivel() {
