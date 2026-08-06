@@ -243,6 +243,37 @@ O projeto também possui testes automatizados de API utilizando RestAssured, JUn
 
 A configuração comum das requisições foi centralizada na classe `ApiBase`, utilizando `RequestSpecification` para reaproveitamento da URL base, Content-Type e configurações de log.
 
+## Testes Unitários
+
+Nesta sprint foram adicionados testes unitários para componentes internos do framework de automação, com o objetivo de aumentar a cobertura de código sem depender da abertura de navegadores reais.
+
+### Cobertura atual
+
+- ✅ TestDataTest
+- ✅ DriverFactoryTest
+
+Foram implementados testes para validar a classe responsável pela geração e manipulação de dados utilizados nos cenários automatizados.
+
+### Coberturas principais:
+
+- geração de e-mails dinâmicos;
+- validação de dados gerados;
+- comportamento dos métodos utilitários;
+- cenários positivos e negativos.
+
+### Executar apenas os testes unitários
+
+```bash
+mvn test -Dtest=TestDataTest
+
+Resultado:
+
+```text
+Tests run: 21
+Failures: 0
+Errors: 0
+Skipped: 0
+
 ### Endpoints automatizados
 
 | Método | Endpoint | Validação                                   |
