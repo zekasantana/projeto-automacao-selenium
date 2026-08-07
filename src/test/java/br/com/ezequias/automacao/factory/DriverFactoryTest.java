@@ -128,7 +128,7 @@ class DriverFactoryTest {
     }
 
     @Test
-    void deveCriarEdgeOptionsComPageLoadStrategyEager() {
+    void deveCriarEdgeOptionsComPageLoadStrategyNormal() {
         EdgeOptions options = invocarMetodoPrivado(
                 "criarEdgeOptions",
                 new Class<?>[]{boolean.class},
@@ -138,7 +138,7 @@ class DriverFactoryTest {
         Capabilities capabilities = options;
 
         assertEquals(
-                PageLoadStrategy.EAGER,
+                PageLoadStrategy.NORMAL,
                 capabilities.getCapability("pageLoadStrategy")
         );
 
