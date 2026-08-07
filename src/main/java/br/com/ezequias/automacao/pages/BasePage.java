@@ -98,9 +98,7 @@ public class BasePage {
         select.selectByVisibleText(texto);
     }
 
-    protected boolean elementoExiste(By elemento) {
-        return !driver.findElements(elemento).isEmpty();
-    }
+
 
     protected boolean elementoEstaVisivel(By elemento) {
         try {
