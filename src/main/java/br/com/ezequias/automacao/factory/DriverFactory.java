@@ -165,7 +165,7 @@ public final class DriverFactory {
          * Mantido para reduzir problemas de carregamento
          * do Edge em execução no CI.
          */
-        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 
         if (headless) {
             options.addArguments("--headless=new");
