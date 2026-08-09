@@ -53,6 +53,8 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 | SonarQube Cloud       | Latest           |
 | JaCoCo                | Latest           |
 | Allure Report         | Latest           |
+| Mockito               | Latest           |
+| JUnit 5               | Latest           |
 ---
 
 # 🏗 Arquitetura do Framework
@@ -298,6 +300,13 @@ Entre os comportamentos validados estão:
 - Selenium WebDriver
 - Maven Surefire Plugin
 - JaCoCo
+
+### Testes Unitários
+
+- Implementação de testes unitários para `DriverFactory`
+- Implementação de testes unitários para `BasePage`
+- Uso de Mockito para isolamento das dependências Selenium
+- Validação integrada ao Maven
 
 ### Executando somente os testes da BasePage
 
@@ -649,6 +658,25 @@ projeto-automacao-selenium
 ├── Dockerfile
 ├── pom.xml
 └── README.md
+
+
+
+src
+├── main
+│   └── java
+│       └── br.com.ezequias.automacao
+│           ├── factory
+│           ├── pages
+│           │   └── BasePage.java
+│           └── ...
+│
+└── test
+    └── java
+        └── br.com.ezequias.automacao
+            ├── pages
+            │   └── BasePageTest.java
+            ├── runner
+            └── stepdefinitions
 
 ┌──────────────────────────────────────────────────────────────┐
 │                    CAMADA DE AUTOMAÇÃO                       │
