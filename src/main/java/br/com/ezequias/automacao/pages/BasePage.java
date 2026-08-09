@@ -28,7 +28,11 @@ public class BasePage {
     protected final WebDriver driver;
 
     public BasePage() {
-        this.driver = DriverFactory.getDriver();
+        this(DriverFactory.getDriver());
+    }
+
+    protected BasePage(WebDriver driver) {
+        this.driver = driver;
     }
 
     protected void clicar(By elemento) {
