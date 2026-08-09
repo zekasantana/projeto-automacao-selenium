@@ -53,6 +53,8 @@ Demonstrar a construção de um framework de automação moderno capaz de atende
 | SonarQube Cloud       | Latest           |
 | JaCoCo                | Latest           |
 | Allure Report         | Latest           |
+| Mockito               | Latest           |
+| JUnit 5               | Latest           |
 ---
 
 # 🏗 Arquitetura do Framework
@@ -260,6 +262,56 @@ Foram implementados testes para validar a classe responsável pela geração e m
 - validação de dados gerados;
 - comportamento dos métodos utilitários;
 - cenários positivos e negativos.
+
+## 🧪 Testes Unitários
+
+Além dos testes automatizados Web e API, o projeto possui uma camada de testes unitários para validar componentes internos do framework de automação.
+
+### BasePageTest
+
+A classe `BasePageTest` foi criada para validar os principais comportamentos da `BasePage`, responsável por centralizar operações reutilizadas pelas Page Objects.
+
+Os testes utilizam **JUnit 5** e **Mockito**, permitindo validar o comportamento da classe de forma isolada, sem necessidade de iniciar um navegador real.
+
+Atualmente, a suíte da `BasePage` possui:
+
+- 14 testes unitários
+- 0 falhas
+- 0 erros
+- 0 testes ignorados
+
+Entre os comportamentos validados estão:
+
+- localização de elementos com `WebDriver`;
+- clique em elementos;
+- preenchimento de campos;
+- limpeza de campos antes da escrita;
+- obtenção de textos;
+- validação de visibilidade;
+- interação com elementos habilitados;
+- tratamento de esperas explícitas;
+- seleção de opções em elementos HTML `<select>`;
+- integração da `BasePage` com componentes do Selenium WebDriver.
+
+### Tecnologias utilizadas nos testes unitários
+
+- JUnit 5
+- Mockito
+- Selenium WebDriver
+- Maven Surefire Plugin
+- JaCoCo
+
+### Testes Unitários
+
+- Implementação de testes unitários para `DriverFactory`
+- Implementação de testes unitários para `BasePage`
+- Uso de Mockito para isolamento das dependências Selenium
+- Validação integrada ao Maven
+
+### Executando somente os testes da BasePage
+
+```bash
+mvn test -Dtest=BasePageTest
 
 ### Executar apenas os testes unitários
 
@@ -606,6 +658,25 @@ projeto-automacao-selenium
 ├── Dockerfile
 ├── pom.xml
 └── README.md
+
+
+
+src
+├── main
+│   └── java
+│       └── br.com.ezequias.automacao
+│           ├── factory
+│           ├── pages
+│           │   └── BasePage.java
+│           └── ...
+│
+└── test
+    └── java
+        └── br.com.ezequias.automacao
+            ├── pages
+            │   └── BasePageTest.java
+            ├── runner
+            └── stepdefinitions
 
 ┌──────────────────────────────────────────────────────────────┐
 │                    CAMADA DE AUTOMAÇÃO                       │
