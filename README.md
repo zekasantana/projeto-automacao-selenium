@@ -359,6 +359,38 @@ Entre os comportamentos validados estão:
 - Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
 - Uso de Spy e ArgumentCaptor para validação das interações da Page Object
 
+## Sprint 3.9 — Testes Unitários da CartPage
+
+Nesta Sprint foram implementados testes unitários para a classe CartPage, utilizando JUnit 5 e Mockito.
+
+Testes implementados
+
+Foram adicionados 10 testes unitários cobrindo os principais comportamentos da CartPage:
+
+1. deveObterMensagemCarrinho
+2. deveRetornarTrueQuandoCarrinhoEstaVazio
+3. deveRetornarFalseQuandoCarrinhoNaoEstaVazio
+4. deveRetornarTrueQuandoProdutoEstaNoCarrinho
+5. deveRetornarTrueQuandoProdutoEstaNoCarrinhoAposRefresh
+6. deveRetornarFalseQuandoProdutoNaoEstaNoCarrinho
+7. deveAcessarCarrinho
+8. deveAdicionarProdutoAoCarrinhoComSucesso
+9. deveTentarAdicionarProdutoNovamenteQuandoOcorrerErro
+10. deveLancarExcecaoQuandoFalharAoAdicionarProdutoDuasVezes
+
+Abordagem utilizada
+
+* JUnit 5
+* Mockito
+* MockedStatic<DriverFactory>
+* spy da CartPage
+* mocks de WebDriver, WebElement e WebDriver.Navigation
+* mocks de ExpectedCondition
+* mock estático de ExpectedConditions
+* validação de retry
+* validação de exceções
+* execução sem navegador real
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -384,8 +416,14 @@ mvn test -Dtest=RegisterPageTest
 
 Resultado:
 
+Validação completa
+
+Comando:
+
+mvn clean verify
+
 ``text
-Tests run: 75
+Tests run: 85
 Failures: 0
 Errors: 0
 Skipped: 0
