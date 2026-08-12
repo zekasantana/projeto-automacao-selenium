@@ -308,10 +308,39 @@ Entre os comportamentos validados estão:
 - Uso de Mockito para isolamento das dependências Selenium
 - Validação integrada ao Maven
 
+### LoginPageTest
+
+A classe LoginPageTest foi criada para validar os principais comportamentos da LoginPage de forma isolada, sem necessidade de iniciar um navegador real.
+
+Os testes utilizam *JUnit 5* e *Mockito*, incluindo MockedStatic<DriverFactory> para interceptar a chamada DriverFactory.getDriver() e fornecer um WebDriver mockado durante a execução dos testes.
+
+Atualmente, a suíte da LoginPage possui:
+
+- 12 testes unitários
+- 0 falhas
+- 0 erros
+- 0 testes ignorados
+
+Entre os comportamentos validados estão:
+
+- acesso à página de login;
+- obtenção da mensagem de erro;
+- preenchimento do e-mail;
+- preenchimento da senha;
+- clique no botão Entrar;
+- execução do fluxo de login;
+- validação de login realizado com sucesso;
+- validações relacionadas aos elementos da página;
+- comportamento de logout;
+- integração da LoginPage com a DriverFactory.
+
+### Resultado atual dos testes
+
+Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
+
 ### Executando somente os testes da BasePage
 
 ```bash
-mvn test -Dtest=BasePageTest
 
 ### Executar apenas os testes unitários
 
@@ -320,8 +349,8 @@ mvn test -Dtest=TestDataTest
 
 Resultado:
 
-```text
-Tests run: 21
+``text
+Tests run: 60
 Failures: 0
 Errors: 0
 Skipped: 0
