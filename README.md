@@ -334,6 +334,19 @@ Entre os comportamentos validados estão:
 - comportamento de logout;
 - integração da LoginPage com a DriverFactory.
 
+### Sprint 3.6 - Testes Unitários da RegisterPage
+
+- Criada a classe RegisterPageTest.java
+- Implementados 8 testes unitários com JUnit 5 e Mockito
+- Cobertura dos fluxos:
+    - acesso à tela de cadastro
+    - preenchimento dos dados
+    - clique no botão de registro
+    - cadastro realizado com sucesso
+    - cadastro não realizado
+    - mensagem de e-mail já existente
+    - validação de campos obrigatórios
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -346,11 +359,21 @@ Após a inclusão dos testes unitários da LoginPage, a validação completa do 
 
 ```bash
 mvn test -Dtest=TestDataTest
+mvn test -Dtest=BasePageTest
+mvn test -Dtest=LoginPageTest
+mvn test -Dtest=RegisterPageTest
+
+
+## Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
+  - Validação individual:
+  - 8 testes
+  - 0 falhas
+  - 0 erros
 
 Resultado:
 
 ``text
-Tests run: 60
+Tests run: 68
 Failures: 0
 Errors: 0
 Skipped: 0
