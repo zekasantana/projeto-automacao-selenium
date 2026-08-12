@@ -347,6 +347,18 @@ Entre os comportamentos validados estão:
     - mensagem de e-mail já existente
     - validação de campos obrigatórios
 
+### Sprint 3.8 - Testes Unitários da SearchPage
+
+- Criada a classe SearchPageTest.java
+- Implementados 7 testes unitários com JUnit 5 e Mockito
+- Cobertura dos métodos públicos da SearchPage
+- Validação do fluxo de busca de produto
+- Validação dos cenários de produto encontrado e não encontrado
+- Validação do clique no produto
+- Validação da mensagem de produto não encontrado
+- Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
+- Uso de Spy e ArgumentCaptor para validação das interações da Page Object
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -366,14 +378,14 @@ mvn test -Dtest=RegisterPageTest
 
 ## Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
   - Validação individual:
-  - 8 testes
+  - 7 testes
   - 0 falhas
   - 0 erros
 
 Resultado:
 
 ``text
-Tests run: 68
+Tests run: 75
 Failures: 0
 Errors: 0
 Skipped: 0
