@@ -378,6 +378,33 @@ Foram adicionados 10 testes unitários cobrindo os principais comportamentos da 
 9. deveTentarAdicionarProdutoNovamenteQuandoOcorrerErro
 10. deveLancarExcecaoQuandoFalharAoAdicionarProdutoDuasVezes
 
+## Sprint 4.0 – Testes Unitários da CheckoutPage
+
+Nesta sprint foram implementados testes unitários para a classe CheckoutPage, utilizando JUnit 5 e Mockito, com o objetivo de aumentar a cobertura de testes da camada Page Object sem necessidade de inicializar um navegador real.
+
+Testes implementados
+
+Foram adicionados 7 testes unitários:
+
+* deveClicarNoCheckboxDeTermosAoAceitarTermos
+* deveClicarNoBotaoCheckoutAoSolicitarCheckout
+* deveRetornarTrueQuandoUrlETituloIndicamPaginaDeCheckout
+* deveRetornarFalseQuandoPaginaDeCheckoutNaoForIdentificada
+* deveRetornarTrueQuandoMensagemDeTermosEstiverVisivel
+* deveRetornarFalseQuandoMensagemDeTermosNaoEstiverVisivel
+* deveRetornarTextoDaMensagemDeTermos
+
+Estratégia utilizada
+
+Os testes utilizam:
+
+* JUnit 5
+* Mockito
+* MockedStatic<DriverFactory>
+* WebDriver mockado
+* spy da CheckoutPage
+* mocks dos métodos herdados da BasePage
+
 Abordagem utilizada
 
 * JUnit 5
@@ -423,7 +450,7 @@ Comando:
 mvn clean verify
 
 ``text
-Tests run: 85
+Tests run: 92
 Failures: 0
 Errors: 0
 Skipped: 0
