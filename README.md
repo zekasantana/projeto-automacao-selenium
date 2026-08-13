@@ -454,6 +454,36 @@ Abordagem utilizada
 * validação de exceções
 * execução sem navegador real
 
+## Sprint 4.2 — Testes Unitários da HomePage
+
+Nesta sprint foram implementados os testes unitários da classe HomePage, responsável pelo acesso à página inicial da aplicação Demo Web Shop.
+
+Testes implementados
+
+Foi criado o arquivo:
+
+src/test/java/br/com/ezequias/automacao/pages/HomePageTest.java
+
+A classe possui 1 teste unitário:
+
+1. deveAcessarHome
+
+O teste valida que o método acessarHome() executa corretamente:
+
+driver.get("https://demowebshop.tricentis.com/");
+
+Estratégia utilizada
+
+Os testes foram desenvolvidos utilizando:
+
+* JUnit 5
+* Mockito
+* MockedStatic<DriverFactory>
+* WebDriver mockado
+* execução sem abertura de navegador real
+
+O DriverFactory.getDriver() é interceptado durante o teste para retornar uma instância mockada de WebDriver, mantendo o teste isolado da infraestrutura do Selenium.
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -472,6 +502,7 @@ mvn test -Dtest=RegisterPageTest
 mvn test -Dtest=SearchPageTest
 mvn test -Dtest=CheckoutPageTest
 mvn test -Dtest=CompleteCheckoutPageTest
+mvn test -Dtest=HomePageTest
 
 
 ## Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
@@ -489,7 +520,7 @@ Comando:
 mvn clean verify
 
 ``text
-Tests run: 109
+Tests run: 110
 Failures: 0
 Errors: 0
 Skipped: 0
