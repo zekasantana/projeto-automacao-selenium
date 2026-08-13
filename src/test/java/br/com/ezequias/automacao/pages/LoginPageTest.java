@@ -43,9 +43,7 @@ class LoginPageTest {
 
     @Test
     void deveAcessarPaginaLogin() {
-
         loginPage.acessarLogin();
-
         verify(driver).get(
                 "https://demowebshop.tricentis.com/login"
         );
@@ -53,7 +51,6 @@ class LoginPageTest {
 
     @Test
     void deveObterMensagemDeErro() {
-
         WebElement elementoMensagem = mock(WebElement.class);
 
         when(driver.findElement(
@@ -68,13 +65,11 @@ class LoginPageTest {
         assertEquals(
                 "Login was unsuccessful.",
                 mensagem
-
         );
     }
 
     @Test
     void deveInformarEmail() {
-
         WebElement campoEmail =
                 mock(WebElement.class);
 
@@ -98,7 +93,6 @@ class LoginPageTest {
 
     @Test
     void deveInformarSenha() {
-
         WebElement campoSenha =
                 mock(WebElement.class);
 
@@ -122,7 +116,6 @@ class LoginPageTest {
 
     @Test
     void deveClicarNoBotaoEntrar() {
-
         WebElement botaoLogin =
                 mock(WebElement.class);
 
@@ -143,7 +136,6 @@ class LoginPageTest {
 
     @Test
     void deveRealizarLogin() {
-
         WebElement campoEmail =
                 mock(WebElement.class);
 
@@ -197,7 +189,6 @@ class LoginPageTest {
 
     @Test
     void deveRetornarTrueQuandoLoginForRealizado() {
-
         WebElement linkLogout =
                 mock(WebElement.class);
 
@@ -216,7 +207,6 @@ class LoginPageTest {
 
     @Test
     void deveRetornarFalseQuandoLoginNaoForRealizado() {
-
         WebElement linkLogout =
                 mock(WebElement.class);
 
@@ -235,7 +225,6 @@ class LoginPageTest {
 
     @Test
     void deveRealizarLogout() {
-
         WebElement linkLogout =
                 mock(WebElement.class);
 
@@ -256,7 +245,6 @@ class LoginPageTest {
 
     @Test
     void deveRetornarTrueQuandoEstiverNaPaginaLogin() {
-
         WebElement linkLogin =
                 mock(WebElement.class);
 
@@ -276,7 +264,6 @@ class LoginPageTest {
 
     @Test
     void deveRetornarFalseQuandoNaoEstiverNaPaginaLogin() {
-
         WebElement linkLogin =
                 mock(WebElement.class);
 
@@ -295,7 +282,6 @@ class LoginPageTest {
 
     @Test
     void deveAguardarLoginRealizado() {
-
         WebElement linkLogout =
                 mock(WebElement.class);
 

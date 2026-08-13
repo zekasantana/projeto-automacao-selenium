@@ -1,5 +1,8 @@
 package br.com.ezequias.automacao.factory;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -7,9 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
-import java.util.Collections;
-import java.util.Map;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
@@ -101,7 +101,6 @@ class DriverFactoryTest {
                 options,
                 "goog:chromeOptions"
         );
-
         assertTrue(argumentos.contains("--headless=new"));
         assertTrue(argumentos.contains("--disable-dev-shm-usage"));
         assertTrue(argumentos.contains("--no-sandbox"));
@@ -116,15 +115,12 @@ class DriverFactoryTest {
                 new Class<?>[]{boolean.class},
                 false
         );
-
         List<String> argumentos = obterArgumentos(
                 options,
                 "goog:chromeOptions"
 
         );
-
         assertFalse(argumentos.contains("--headless=new"));
-
     }
 
     @Test
@@ -145,11 +141,9 @@ class DriverFactoryTest {
         List<String> argumentos = obterArgumentos(
                 options,
                 "ms:edgeOptions"
-
         );
 
          assertTrue(argumentos.contains("--headless=new"));
-
     }
 
     @Test
@@ -159,11 +153,9 @@ class DriverFactoryTest {
                 new Class<?>[]{boolean.class},
                 true
         );
-
         List<String> argumentos = obterArgumentos(
                 options,
                 "moz:firefoxOptions"
-
         );
 
         assertTrue(argumentos.contains("-headless"));

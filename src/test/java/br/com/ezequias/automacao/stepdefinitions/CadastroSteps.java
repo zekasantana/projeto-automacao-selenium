@@ -11,8 +11,6 @@ public class CadastroSteps {
 
     private final RegisterPage registerPage = new RegisterPage();
 
-    private String emailGerado;
-
     @Given("que o usuário acessa a tela de cadastro")
     @Given("que estou na página de cadastro")
     public void acessarTelaCadastro() {
@@ -22,7 +20,7 @@ public class CadastroSteps {
     @When("preencher os dados válidos")
     public void preencherDadosValidos() {
 
-        emailGerado =
+        String emailGerado =
                 "teste" + System.currentTimeMillis() + "@email.com";
 
         registerPage.preencherCadastro(

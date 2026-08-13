@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -94,8 +95,7 @@ public class RegisterPageTest {
         ArgumentCaptor<String> valorCaptor =
                 ArgumentCaptor.forClass(String.class);
 
-        verify(registerpage,
-                org.mockito.Mockito.times(5))
+        verify(registerpage,times(5))
                 .escrever(
                         locatorCaptor.capture(),
                         valorCaptor.capture()

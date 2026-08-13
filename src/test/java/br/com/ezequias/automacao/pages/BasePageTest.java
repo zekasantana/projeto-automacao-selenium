@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import java.util.List;
 
-import io.cucumber.java.nl.Stel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -143,7 +141,7 @@ class BasePageTest {
         boolean resultado =
                 basePage.elementoEstaVisivel(locator);
 
-        assertEquals(true, resultado);
+        assertTrue(resultado);
     }
 
     @Test

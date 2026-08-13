@@ -6,7 +6,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.jupiter.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -35,7 +34,7 @@ public class LoginSteps {
 
     @Then("deve visualizar a página inicial autenticada")
     public void deveVisualizarPaginaInicialAutenticada() {
-        Assertions.assertTrue(
+        assertTrue(
                 loginPage.loginRealizadoComSucesso(),
                 "O link de logout não foi exibido após o login."
         );
@@ -69,7 +68,7 @@ public class LoginSteps {
 
     @Then("deve visualizar a pagina de login")
     public void deveVisualizarAPaginaDeLogin() {
-        Assertions.assertTrue(
+        assertTrue(
                 loginPage.estaNaPaginaLogin()
         );
     }
