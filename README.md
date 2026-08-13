@@ -394,6 +394,42 @@ Foram adicionados 7 testes unitários:
 * deveRetornarFalseQuandoMensagemDeTermosNaoEstiverVisivel
 * deveRetornarTextoDaMensagemDeTermos
 
+Sprint 4.1 – Testes Unitários da CompleteCheckoutPage
+
+Nesta sprint foram implementados testes unitários para a classe CompleteCheckoutPage, utilizando JUnit 5 e Mockito para validar os principais fluxos do checkout completo sem necessidade de abrir um navegador real.
+
+Testes implementados
+
+Foram adicionados 17 testes unitários cobrindo:
+
+* preenchimento dos dados de cobrança;
+* preenchimento dinâmico do e-mail;
+* fluxo quando o formulário de cobrança não está disponível;
+* validação da etapa Shipping Address;
+* continuação do endereço de entrega;
+* validação da etapa Shipping Method;
+* seleção do método de entrega;
+* validação da etapa Payment Method;
+* seleção do método de pagamento;
+* validação da etapa Payment Information;
+* continuação das informações de pagamento;
+* confirmação do pedido;
+* validação do pedido realizado com sucesso;
+* cenários negativos com IllegalStateException.
+
+Estratégia utilizada
+
+Os testes utilizam:
+
+* JUnit 5;
+* Mockito;
+* MockedStatic<DriverFactory>;
+* WebDriver mockado;
+* WebElement mockado;
+* spy da CompleteCheckoutPage;
+* mocks dos métodos herdados da BasePage;
+* simulação dos comportamentos usados por WebDriverWait e ExpectedConditions.
+
 Estratégia utilizada
 
 Os testes utilizam:
@@ -433,11 +469,14 @@ mvn test -Dtest=TestDataTest
 mvn test -Dtest=BasePageTest
 mvn test -Dtest=LoginPageTest
 mvn test -Dtest=RegisterPageTest
+mvn test -Dtest=SearchPageTest
+mvn test -Dtest=CheckoutPageTest
+mvn test -Dtest=CompleteCheckoutPageTest
 
 
 ## Uso de MockedStatic<DriverFactory> para isolamento do WebDriver
   - Validação individual:
-  - 7 testes
+  - 17 testes
   - 0 falhas
   - 0 erros
 
@@ -450,7 +489,7 @@ Comando:
 mvn clean verify
 
 ``text
-Tests run: 92
+Tests run: 109
 Failures: 0
 Errors: 0
 Skipped: 0
