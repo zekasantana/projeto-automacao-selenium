@@ -8,8 +8,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CompraSteps {
 
@@ -71,7 +71,7 @@ public class CompraSteps {
         assertEquals(
                 "No products were found that matched your criteria.",
                 searchPage.obterMensagemProdutoNaoEncontrado(),
-                "A mensagem apresenta está diferente da esperada."
+                "A mensagem apresentada está diferente da esperada."
         );
     }
 }

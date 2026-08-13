@@ -1,6 +1,7 @@
 package br.com.ezequias.automacao.pages;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -11,7 +12,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.com.ezequias.automacao.factory.DriverFactory;
 

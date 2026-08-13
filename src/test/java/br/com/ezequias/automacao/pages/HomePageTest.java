@@ -1,9 +1,11 @@
 package br.com.ezequias.automacao.pages;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.openqa.selenium.WebDriver;
@@ -20,7 +22,7 @@ class HomePageTest {
     void setUp() {
         driver = mock(WebDriver.class);
 
-        driverFactoryMock = org.mockito.Mockito.mockStatic(DriverFactory.class);
+        driverFactoryMock = mockStatic(DriverFactory.class);
         driverFactoryMock.when(DriverFactory::getDriver).thenReturn(driver);
 
         homePage = new HomePage();
