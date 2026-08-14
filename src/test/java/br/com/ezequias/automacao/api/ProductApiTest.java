@@ -76,4 +76,81 @@ public class ProductApiTest extends ApiBase {
                         "schemas/product-schema.json"));
     }
 
+    @Test
+    void deveAtualizarProdutoParcialmente() {
+
+        String body = """
+        {
+          "title": "Produto Atualizado"
+        }
+        """;
+
+        given()
+                .spec(requestSpecification)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .patch("/products/1")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .body("title", equalTo("Produto Atualizado"));
+    }
+
+    @Test
+    void deveDeletarProduto() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .delete("/products/1")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200);
+    }
+
+    @Test
+    void deveRetornarBodyVazioQuandoProdutoNaoExiste() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .get("/products/999999")
+                .then()
+                .statusCode(200)
+                .body(equalTo(""));
+    }
+
+    @Test
+    void deveSimularAtualizacaoDeProdutoInexistente() {
+
+        String body = """
+        {
+          "title": "Produto Inexistente"
+        }
+        """;
+
+        given()
+                .spec(requestSpecification)
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .patch("/products/999999")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(999999))
+                .body("title", equalTo("Produto Inexistente"));
+    }
+
+    @Test
+    void deveRetornarBodyVazioAoExcluirProdutoInexistente() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .delete("/products/999999")
+                .then()
+                .statusCode(200)
+                .body(equalTo(""));
+    }
 }
