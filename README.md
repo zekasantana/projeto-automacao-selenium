@@ -484,6 +484,36 @@ Os testes foram desenvolvidos utilizando:
 
 O DriverFactory.getDriver() é interceptado durante o teste para retornar uma instância mockada de WebDriver, mantendo o teste isolado da infraestrutura do Selenium.
 
+## Sprint 4.4 — API PATCH, DELETE e Cenários Negativos
+
+Nesta sprint foram ampliados os testes de API REST utilizando RestAssured, adicionando operações de atualização, exclusão e cenários negativos para produtos da Fake Store API.
+
+Implementações
+
+* Atualização parcial de produto com PATCH /products/{id}
+* Exclusão de produto com DELETE /products/{id}
+* Validação de produto inexistente com GET /products/{id}
+* Validação de atualização de produto inexistente com PATCH
+* Validação de exclusão de produto inexistente com DELETE
+
+Cenários adicionados
+
+* deveAtualizarProdutoParcialmente
+* deveDeletarProduto
+* deveRetornarBodyVazioQuandoProdutoNaoExiste
+* deveSimularAtualizacaoDeProdutoInexistente
+* deveRetornarBodyVazioAoExcluirProdutoInexistente
+
+Comportamento observado da Fake Store API
+
+A Fake Store API possui alguns comportamentos específicos para recursos inexistentes:
+
+* GET /products/999999 retorna HTTP 200 com body vazio
+* PATCH /products/999999 retorna HTTP 200 simulando a atualização do recurso
+* DELETE /products/999999 retorna HTTP 200 com body vazio
+
+Os testes foram implementados considerando o comportamento real retornado pela API, sem assumir códigos HTTP diferentes dos efetivamente recebidos.
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -520,7 +550,7 @@ Comando:
 mvn clean verify
 
 ``text
-Tests run: 110
+Tests run: 115
 Failures: 0
 Errors: 0
 Skipped: 0
