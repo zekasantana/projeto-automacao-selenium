@@ -57,6 +57,9 @@ class LoginPageTest {
                 By.cssSelector(".validation-summary-errors")
         )).thenReturn(elementoMensagem);
 
+        when(elementoMensagem.isDisplayed())
+                .thenReturn(true);
+
         when(elementoMensagem.getText())
                 .thenReturn("Login was unsuccessful.");
 

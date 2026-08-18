@@ -71,9 +71,7 @@ public class LoginPage extends BasePage {
     }
 
     public String obterMensagemErro() {
-        return driver
-                .findElement(mensagemErro)
-                .getText();
+        return obterTexto(mensagemErro);
     }
 
     public void realizarLogout() {
