@@ -514,6 +514,39 @@ A Fake Store API possui alguns comportamentos específicos para recursos inexist
 
 Os testes foram implementados considerando o comportamento real retornado pela API, sem assumir códigos HTTP diferentes dos efetivamente recebidos.
 
+## Sprint 4.4 — Validações avançadas de API
+
+Nesta sprint, a cobertura dos testes de API foi ampliada com RestAssured, incluindo validações de headers, tempo de resposta, cenários negativos e autenticação com Bearer Token.
+
+### Validações de produtos
+
+Foram adicionadas as seguintes validações à `ProductApiTest`:
+
+- Validação do header `Content-Type`;
+- Validação de resposta no formato JSON;
+- Validação do tempo de resposta inferior a 5 segundos;
+- Busca de produto inexistente;
+- Atualização simulada de produto inexistente;
+- Exclusão de produto inexistente.
+
+### Testes de autenticação
+
+Foi criada a classe `AuthenticationApiTest`, utilizando a API DummyJSON, com os seguintes cenários:
+
+- Login com credenciais válidas;
+- Validação dos tokens de acesso e atualização;
+- Acesso ao endpoint protegido com Bearer Token;
+- Rejeição de credenciais inválidas;
+- Rejeição de acesso ao endpoint protegido sem token;
+- Validação dos status HTTP `200`, `400` e `401`.
+
+### Resultado
+
+A validação completa foi executada com:
+
+```bash
+mvn clean verify
+
 ### Resultado atual dos testes
 
 Após a inclusão dos testes unitários da LoginPage, a validação completa do projeto apresentou:
@@ -550,7 +583,7 @@ Comando:
 mvn clean verify
 
 ``text
-Tests run: 115
+Tests run: 121
 Failures: 0
 Errors: 0
 Skipped: 0

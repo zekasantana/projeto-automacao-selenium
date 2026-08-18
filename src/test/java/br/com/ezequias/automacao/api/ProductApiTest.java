@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.lessThan;
+import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import io.restassured.http.ContentType;
 
@@ -152,5 +154,34 @@ public class ProductApiTest extends ApiBase {
                 .then()
                 .statusCode(200)
                 .body(equalTo(""));
+    }
+
+    @Test
+    void deveValidarContentTypeDaResposta() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .get("/products/1")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .header(
+                        "Content-Type",
+                        containsString("application/json")
+                );
+    }
+
+    @Test
+    void deveResponderDentroDoTempoEsperado() {
+
+        given()
+                .spec(requestSpecification)
+                .when()
+                .get("/products/1")
+                .then()
+                .log().ifValidationFails()
+                .statusCode(200)
+                .time(lessThan(5000L));
     }
 }
